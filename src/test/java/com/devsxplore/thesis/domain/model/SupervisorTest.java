@@ -1,7 +1,6 @@
 package com.devsxplore.thesis.domain.model;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +31,7 @@ public class SupervisorTest {
         informationsdatei = "Informationsdatei";
         links = "Links";
         thema = "Thema";
-        themen = new ArrayList<String>();
+        themen = new ArrayList<>();
     }
 
 
