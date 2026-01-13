@@ -45,4 +45,19 @@ public class SupervisorTest {
         assertThat(supervisor.getId().id()).isEqualTo(1L);
         assertThat(supervisor.getFullName()).isEqualTo("Nawied Khaleqi");
     }
+
+    @Test
+    @DisplayName("Supervisor creates a topic")
+    void supervisorCreatesTopicTest() {
+        Supervisor supervisor = Supervisor.createSupervisorWithId(new SupervisorId(31L), name, contact);
+        supervisor.addTopic("Titel", "Beschreibung");
+        assertThat(supervisor.getTopicIdByTitle("Titel")).isEqualTo("Beschreibung");
+
+    }
+
+    @Test
+    @DisplayName("If the Supervisor creates two topics the length of the Topic List should be 2")
+    void supervisorCreates2Topics() {
+
+    }
 }

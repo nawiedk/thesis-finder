@@ -3,6 +3,8 @@ package com.devsxplore.thesis.profiles.domain.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithoutId;
+
 public class Supervisor {
 
     private final SupervisorId id;
@@ -84,4 +86,51 @@ public class Supervisor {
             throw new IllegalArgumentException("Fields cannot be null");
         return fields.addAll(List.copyOf(newFields));
     }
+
+    public boolean addTopic(String title, String description){
+        Topic topic = createTopicWithoutId(title, description);
+        return topics.add(topic);
+    }
+
+    public Long getTopicId(String title){
+        for (Topic topic : topics){
+            if(topic.getTitle().equals(title)){
+                return topic.getId();
+            }
+        }
+
+        return -1L;
+    }
+
+    public String getTopicIdByTitle(String title){
+        for (Topic topic : topics){
+            if(topic.getTitle().equals(title)){
+                return topic.getDescription();
+            }
+        }
+
+        return "";
+    }
+
+    public String getTitle(Long id){
+        for(Topic topic : topics){
+            if(topic.getId().equals(id)){
+                return topic.getTitle();
+            }
+        }
+
+        return "";
+    }
+
+    public String getDescription(Long id){
+        for(Topic topic : topics){
+            if(topic.getId().equals(id)){
+                return topic.getDescription();
+            }
+        }
+
+        return "";
+    }
+
+
 }
