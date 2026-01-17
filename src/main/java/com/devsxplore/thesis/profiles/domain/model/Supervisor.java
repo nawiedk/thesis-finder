@@ -34,20 +34,40 @@ public class Supervisor {
         return new Supervisor(id, name, contactDetails);
     }
 
-    public SupervisorId getId() {
-        return id;
-    }
-
-    public Name getName() {
-        return name;
+    public long getId() {
+        return id.id();
     }
 
     public String getFullName() {
         return name.getFullName();
     }
 
-    public Contact getContactDetails() {
-        return contactDetails;
+    public String getFirstName() {
+        return name.firstName();
+    }
+
+    public String getLastName() {
+        return name.lastName();
+    }
+
+    public AcademicTitle getTitle() {
+        return name.title();
+    }
+
+    public String getTitleAsString() {
+        return name.title().toString();
+    }
+
+    public String getEmailAsString(){
+        return contactDetails.email().email();
+    }
+
+    public String getPhone(){
+        return contactDetails.phone();
+    }
+
+    public String getOffice(){
+        return contactDetails.office();
     }
 
     public List<FieldTag> getFields() {

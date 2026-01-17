@@ -23,4 +23,8 @@ public record Contact(Email email, String office, String phone) {
                 throw new IllegalArgumentException("Invalid phone number");
         }
     }
+
+    public static Contact contactFromPersistence(String email, String office, String phone){
+        return new Contact(new Email(email), office, phone);
+    }
 }

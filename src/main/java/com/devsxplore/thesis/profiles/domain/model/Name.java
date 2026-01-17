@@ -12,6 +12,10 @@ public record Name(String firstName, String lastName, AcademicTitle title) {
             title = AcademicTitle.NONE;
     }
 
+    public static Name nameFromPersistence(String firstName, String lastName, String title){
+        return new Name(firstName, lastName, AcademicTitle.valueOf(title));
+    }
+
     public String getFullName() {
         if (title == AcademicTitle.NONE) {
             return firstName + " " + lastName;
