@@ -4,4 +4,5 @@ import com.devsxplore.thesis.profiles.domain.model.Supervisor;
 
 public interface SupervisorRepositoryPort {
     Supervisor save(Supervisor supervisor);
+    Supervisor load(Long id);
 }

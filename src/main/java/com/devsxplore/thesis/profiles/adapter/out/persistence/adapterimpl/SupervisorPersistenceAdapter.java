@@ -8,6 +8,8 @@ import com.devsxplore.thesis.profiles.domain.model.Supervisor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class SupervisorPersistenceAdapter implements SupervisorRepositoryPort {
@@ -20,5 +22,11 @@ public class SupervisorPersistenceAdapter implements SupervisorRepositoryPort {
         SupervisorJDBCEntity entity = supervisorMapper.toJDBCEntity(supervisor);
         var newSupervisor = supervisorRepository.save(entity);
         return supervisorMapper.mapToDomainEntity(newSupervisor);
+    }
+
+    @Override
+    public Supervisor load(Long id) {
+        Optional<SupervisorJDBCEntity> entity = supervisorRepository.findById(id);
+        return supervisorMapper.mapToDomainEntity(entity.orElseThrow());
     }
 }

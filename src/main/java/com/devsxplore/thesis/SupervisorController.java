@@ -1,17 +1,22 @@
 package com.devsxplore.thesis;
 
+import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateSupervisorUseCase;
+import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateTopicUseCase;
+import com.devsxplore.thesis.profiles.domain.model.Topic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller("/supervisor")
 @RequiredArgsConstructor
 public class SupervisorController {
 
-    private final CreateSupervisorUseCase useCase;
+    private final CreateSupervisorUseCase supervisorUseCase;
+    private final CreateTopicUseCase topicUseCase;
 
     @GetMapping("/")
     public String showForm() {
@@ -28,12 +33,12 @@ public class SupervisorController {
     }
 
 
-//    @PostMapping("/sendtopic")
-//    public String sendTopic(TopicForm form, RedirectAttributes redirectAttributes){
-//        MyCommand command = new MyCommand(form.getTopic(), form.getDescription());
-//        userCase.createTopic(command);
-//        redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
-//        return "redirect:/";
-//    }
+    @PostMapping("/createTopic")
+    public String createTopic(TopicForm form, RedirectAttributes redirectAttributes){
+        CreateTopicCommand command = new CreateTopicCommand(null, form.getTopic(), form.getDescription());
+        Topic topic = topicUseCase.createTopic(command);
+        redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
+        return "redirect:/";
+    }
 
 }
