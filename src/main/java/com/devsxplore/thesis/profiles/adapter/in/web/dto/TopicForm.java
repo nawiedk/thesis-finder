@@ -1,4 +1,4 @@
-package com.devsxplore.thesis;
+package com.devsxplore.thesis.profiles.adapter.in.web.dto;
 
 import jakarta.validation.constraints.NotNull;
 

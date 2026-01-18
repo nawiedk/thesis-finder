@@ -1,5 +1,6 @@
-package com.devsxplore.thesis;
+package com.devsxplore.thesis.profiles.adapter.in.web;
 
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.TopicForm;
 import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateSupervisorUseCase;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateTopicUseCase;
