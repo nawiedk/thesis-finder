@@ -36,7 +36,7 @@ public class SupervisorController {
 
     @PostMapping("/createTopic")
     public String createTopic(TopicForm form, RedirectAttributes redirectAttributes){
-        CreateTopicCommand command = new CreateTopicCommand(null, form.getTopic(), form.getDescription());
+        CreateTopicCommand command = new CreateTopicCommand(1L, form.getTopic(), form.getDescription());
         Topic topic = topicUseCase.createTopic(command);
         redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
         return "redirect:/";

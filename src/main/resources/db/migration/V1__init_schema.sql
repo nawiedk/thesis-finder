@@ -1,5 +1,5 @@
 CREATE TABLE supervisor (
-                            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                            id BIGSERIAL PRIMARY KEY,
                             title VARCHAR(255),
                             first_name VARCHAR(255) NOT NULL,
                             last_name VARCHAR(255) NOT NULL,
@@ -9,9 +9,13 @@ CREATE TABLE supervisor (
 );
 
 CREATE TABLE topic (
-                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                       title VARCHAR(500) NOT NULL,
-                       description CLOB,
+                       id BIGSERIAL PRIMARY KEY,
+                       topic VARCHAR(500) NOT NULL,
+                       description text,
                        supervisor_id BIGINT,
+                       supervisor_key INT,
                        CONSTRAINT fk_supervisor FOREIGN KEY (supervisor_id) REFERENCES supervisor(id)
 );
+
+INSERT INTO SUPERVISOR (ID, FIRST_NAME, LAST_NAME, EMAIL, TITLE)
+VALUES (1, 'Max', 'Mustermann', 'max@hhu.de', 'DR');
