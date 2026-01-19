@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPersistence;
-import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPersistence;
+import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPrimitive;
+import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPrimitive;
 import static com.devsxplore.thesis.profiles.domain.model.Supervisor.createSupervisorWithId;
 
 @Component
@@ -18,9 +18,9 @@ public class SupervisorMapper {
 
     public Supervisor mapToDomainEntity(SupervisorJDBCEntity entity){
 
-        var name = nameFromPersistence(entity.firstName(), entity.lastName(), entity.title());
+        var name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
 
-        var contact = contactFromPersistence(entity.email(), entity.office(), entity.phone());
+        var contact = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
 
         var supervisor = createSupervisorWithId(
                 new SupervisorId(entity.id()),

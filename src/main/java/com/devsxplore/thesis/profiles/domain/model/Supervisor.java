@@ -36,7 +36,7 @@ public class Supervisor {
         return new Supervisor(id, name, contactDetails);
     }
 
-    public long getId() {
+    public Long getId() {
         return id.id();
     }
 
@@ -122,14 +122,10 @@ public class Supervisor {
         return -1L;
     }
 
-    public String getTopicIdByTitle(String title){
-        for (Topic topic : topics){
-            if(topic.getTitle().equals(title)){
-                return topic.getDescription();
-            }
-        }
-
-        return "";
+    public List<Topic> getTopicIdByTitle(String title){
+        return topics.stream()
+                .filter(topic -> topic.getTitle().equals(title))
+                .toList();
     }
 
     public String getTitle(Long id){

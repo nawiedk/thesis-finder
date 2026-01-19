@@ -24,7 +24,6 @@ public class SupervisorService implements CreateSupervisorUseCase, CreateTopicUs
     public Supervisor createSupervisor(CreateSupervisorCommand command) {
         var supervisor = createSupervisorWithoutId(command.name(),
                 command.contactDetails());
-
         return repositoryPort.save(supervisor);
     }
 
@@ -32,8 +31,7 @@ public class SupervisorService implements CreateSupervisorUseCase, CreateTopicUs
     public Topic createTopic(CreateTopicCommand command) {
         Supervisor supervisor = repositoryPort.load(command.supervisorId());
         supervisor.addTopic(command.title(), command.description());
-        repositoryPort.save(supervisor);
-        return repositoryPort.load(command.supervisorId())
+        return repositoryPort.save(supervisor)
                 .getTopics()
                 .stream()
                 .filter(topic -> topic.getTitle().equals(command.title()))

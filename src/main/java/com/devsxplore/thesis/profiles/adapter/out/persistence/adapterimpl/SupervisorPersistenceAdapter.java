@@ -19,7 +19,7 @@ public class SupervisorPersistenceAdapter implements SupervisorRepositoryPort {
 
     @Override
     public Supervisor save(Supervisor supervisor) {
-        SupervisorJDBCEntity entity = supervisorMapper.toJDBCEntity(supervisor);
+        var entity = supervisorMapper.toJDBCEntity(supervisor);
         var newSupervisor = supervisorRepository.save(entity);
         return supervisorMapper.mapToDomainEntity(newSupervisor);
     }
