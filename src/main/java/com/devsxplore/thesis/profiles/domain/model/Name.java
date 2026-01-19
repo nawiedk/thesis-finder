@@ -12,8 +12,8 @@ public record Name(String firstName, String lastName, AcademicTitle title) {
             title = AcademicTitle.NONE;
     }
 
-    public static Name nameFromPersistence(String firstName, String lastName, String title){
-        return new Name(firstName, lastName, AcademicTitle.valueOf(title));
+    public static Name nameFromPrimitive(String firstName, String lastName, String title){
+        return new Name(firstName, lastName, AcademicTitle.findByString(title));
     }
 
     public String getFullName() {
