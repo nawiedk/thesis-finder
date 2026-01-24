@@ -1,7 +1,7 @@
 package com.devsxplore.thesis.profiles.adapter.in.web;
 
 import com.devsxplore.thesis.profiles.adapter.in.web.dto.SupervisorCreateDTO;
-import com.devsxplore.thesis.profiles.adapter.in.web.dto.TopicForm;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.TopicCreateDTO;
 import com.devsxplore.thesis.profiles.application.port.in.command.CreateSupervisorCommand;
 import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateSupervisorUseCase;
@@ -52,8 +52,8 @@ public class SupervisorController {
 
 
     @PostMapping("/createTopic")
-    public String createTopic(TopicForm form, RedirectAttributes redirectAttributes){
-        CreateTopicCommand command = new CreateTopicCommand(1L, form.getTopic(), form.getDescription());
+    public String createTopic(TopicCreateDTO form, RedirectAttributes redirectAttributes){
+        CreateTopicCommand command = new CreateTopicCommand(1L, form.topic(), form.description());
         Topic topic = topicUseCase.createTopic(command);
         redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
         return "redirect:/";
