@@ -42,7 +42,7 @@ public class SupervisorMapper {
 
         return new SupervisorJDBCEntity(
                 supervisor.getId(),
-                supervisor.getTitleAsString(),
+                supervisor.getAcademicTitle(),
                 supervisor.getFirstName(),
                 supervisor.getLastName(),
                 supervisor.getEmailAsString(),
