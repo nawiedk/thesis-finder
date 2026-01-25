@@ -1,8 +1,13 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
+import com.devsxplore.thesis.profiles.adapter.out.persistence.adapterimpl.SupervisorPersistenceAdapter;
+import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
+import com.devsxplore.thesis.profiles.application.service.SupervisorService;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithId;
 import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithoutId;
 
 public class Supervisor {
@@ -73,6 +78,31 @@ public class Supervisor {
     public boolean addTopic(String title, String description){
         Topic topic = createTopicWithoutId(title, description);
         return topics.add(topic);
+    }
+
+    public boolean addTopicWithId(Long id, String title, String description){
+        Topic topic = createTopicWithId(new TopicId(id), title, description);
+        return topics.add(topic);
+    }
+
+    public Topic editTopic(Long id, String title, String description){
+        for (Topic topic : topics){
+            if(topic.getId().equals(id)){
+                topic.updateTopic(title, description);
+                return topic;
+            }
+        }
+        return null;
+    }
+
+    public Long getTopicId(String title){
+        for (Topic topic : topics){
+            if(topic.getTitle().equals(title)){
+                return topic.getId();
+            }
+        }
+
+        return -1L;
     }
 
     public List<Topic> getTopicIdByTitle(String title){

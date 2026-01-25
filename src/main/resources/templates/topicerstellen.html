@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thema Erstellen</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h1>Betreuende Menü</h1>
+
+<h2>Ihre Themen:</h2>
+
+
+
+<h2>Thema erstellen.</h2>
+<form method="post" th:action="@{/supervisor/createTopic}">
+  <input type="hidden" name="id">
+  Titel <input name="topic" type="text"> <br>
+  Beschreibung <input name="description" type="text"> <br>
+  <button type="submit">Abschicken</button>
+</form>
+
+<div th:if="${erfolgreichErstellt}">
+  <p>Thema wurde erfolgreich erstellt.</p>
+</div>
+
+</body>
+</html>

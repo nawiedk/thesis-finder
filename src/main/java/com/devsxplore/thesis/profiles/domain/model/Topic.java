@@ -2,15 +2,15 @@ package com.devsxplore.thesis.profiles.domain.model;
 
 public class Topic {
     private final TopicId id;
-    private final String title;
-    private final String description;
+    private String title;
+    private String description;
 
     private Topic(TopicId id, String title, String description) {
         if (id == null) {
             throw new IllegalArgumentException("");
         }
         if (title == null || title.isBlank()) {
-            throw new IllegalArgumentException("dawda");
+            throw new IllegalArgumentException("Title cannot be blank");
         }
         if (description == null || description.isBlank()) {
             description = "";
@@ -31,6 +31,19 @@ public class Topic {
 
     public String getDescription() {
         return description;
+    }
+
+    private void setTitle(String title){
+        this.title = title;
+    }
+
+    private void setDescription(String description){
+        this.description = description;
+    }
+
+    void updateTopic(String title, String description){
+        setTitle(title);
+        setDescription(description);
     }
 
     public static Topic createTopicWithoutId(String title, String description){
