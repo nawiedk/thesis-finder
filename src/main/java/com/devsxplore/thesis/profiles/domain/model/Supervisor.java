@@ -1,8 +1,13 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
+import com.devsxplore.thesis.profiles.adapter.out.persistence.adapterimpl.SupervisorPersistenceAdapter;
+import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
+import com.devsxplore.thesis.profiles.application.service.SupervisorService;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithId;
 import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithoutId;
 
 public class Supervisor {
@@ -14,6 +19,7 @@ public class Supervisor {
     private final List<Link> links;
     private final List<InformationFile> files;
     private final List<Topic> topics;
+
 
     private Supervisor(SupervisorId id, Name name, Contact contactDetails) {
         if (name == null || contactDetails == null) {
@@ -110,6 +116,21 @@ public class Supervisor {
     public boolean addTopic(String title, String description){
         Topic topic = createTopicWithoutId(title, description);
         return topics.add(topic);
+    }
+
+    public boolean addTopicWithId(Long id, String title, String description){
+        Topic topic = createTopicWithId(new TopicId(id), title, description);
+        return topics.add(topic);
+    }
+
+    public Topic editTopic(Long id, String title, String description){
+        for (Topic topic : topics){
+            if(topic.getId().equals(id)){
+                topic.updateTopic(title, description);
+                return topic;
+            }
+        }
+        return null;
     }
 
     public Long getTopicId(String title){

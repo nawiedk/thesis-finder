@@ -1,23 +1,8 @@
 package com.devsxplore.thesis.profiles.adapter.in.web.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+//TODO:Zu TopicCreateForm umändern
+public record TopicForm(Long id, String topic, String description) {
 
-public class TopicForm {
-
-    @NotNull
-    private final String topic;
-    private final String description;
-
-    public TopicForm(String topic, String description) {
-        this.topic = topic;
-        this.description = description;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

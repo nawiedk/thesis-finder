@@ -30,7 +30,10 @@ public class SupervisorMapper {
 
         List<Topic> topics = entity.topics().stream().map(TopicMapper::mapToDomainEntity).toList();
 
-        topics.forEach(topic -> supervisor.addTopic(topic.getTitle(), topic.getDescription()));
+        //FIXME: bei Controller kam nullpointer exception da ich auf die id der topics zugegriffen habe,allerdings wird hier die Id nicht mit übertragen. deswegen ist es immer null
+        //FIXME: Deswegen habe ich in Supervisor neue Methode addTopicWithId hinzugefügt damit die ids mit rausgeladen werden wenn es zum domain objekt gemacht wird
+        //FIXME: Falls es zu Problemen kommt supervisor.addTopicWithId zu addTopic machen
+        topics.forEach(topic -> supervisor.addTopicWithId(topic.getId() ,topic.getTitle(), topic.getDescription()));
 
         return supervisor;
     }

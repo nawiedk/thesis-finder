@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SupervisorMenu</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+
+<h1>Betreuende Menü</h1>
+<h2>Liste ihrer Themen:</h2>
+<table>
+    <thead>
+    <tr>
+        <td>Name</td>
+        <td>Beschreibung</td>
+        <td>ID</td>
+    </tr>
+    <tbody>
+    <tr th:each="themen:${topics}">
+        <td th:text="${themen.title}"></td>
+        <td th:text="${themen.description}"></td>
+        <td th:text="${themen.getId()}"></td>
+        <td>
+            <form method="get" th:action="@{/supervisor/editTopic/{topicId}(topicId=${themen.getId()})}">
+                <button type="submit">Bearbeiten</button>
+            </form>
+        </td><br>
+    </tr>
+
+    </tbody>
+    </thead>
+</table>
+
+
+<form th:action="@{/supervisor/topicform}" method="get">
+    <button name="themaerstellen">Thema erstellen</button>
+</form>
+</body>
+</html>

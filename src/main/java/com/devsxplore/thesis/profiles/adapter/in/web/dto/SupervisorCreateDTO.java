@@ -1,6 +1,9 @@
 package com.devsxplore.thesis.profiles.adapter.in.web.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record SupervisorCreateDTO(
+        @NotBlank
         String firstName,
         String lastName,
         String title,
