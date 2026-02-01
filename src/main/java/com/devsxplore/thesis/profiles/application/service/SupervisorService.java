@@ -64,17 +64,14 @@ public class SupervisorService implements
     }
 
     @Override
-    public Topic editTopic(EditTopicCommand command) {
+    public Topic updateTopic(TopicUpdateCommand command) {
         Supervisor supervisor = supervisorRepositoryPort.load(command.supervisorId())
                 .orElseThrow(() -> new IllegalArgumentException("Supervisor not found"));
 
-        supervisor.updateTopic(command.topicId(), command.title(), command.description());
+        Topic topic = supervisor.updateTopic(command.topicId(), command.title(), command.description());
         supervisorRepositoryPort.save(supervisor);
 
-        return supervisor.getTopics().stream()
-                .filter(t -> t.getTopicId().equals(command.topicId()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found after update"));
+        return topic;
     }
 
     @Override
