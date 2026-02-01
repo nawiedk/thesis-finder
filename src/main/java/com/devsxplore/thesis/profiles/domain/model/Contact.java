@@ -24,7 +24,7 @@ public record Contact(Email email, String office, String phone) {
         }
     }
 
-    public static Contact contactFromPrimitive(String email, String office, String phone){
+    public static Contact contactFromPrimitive(String email, String office, String phone) {
         return new Contact(new Email(email), office, phone);
     }
 }

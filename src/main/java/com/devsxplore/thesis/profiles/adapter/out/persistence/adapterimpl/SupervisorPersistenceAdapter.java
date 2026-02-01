@@ -8,25 +8,45 @@ import com.devsxplore.thesis.profiles.domain.model.Supervisor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.SupervisorMapper.mapSupervisorToDomainEntity;
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.SupervisorMapper.mapSupervisorToJDBCEntity;
 
 @Component
 @RequiredArgsConstructor
 public class SupervisorPersistenceAdapter implements SupervisorRepositoryPort {
 
     private final SupervisorRepository supervisorRepository;
-    private final SupervisorMapper supervisorMapper;
 
     @Override
     public Supervisor save(Supervisor supervisor) {
-        var entity = supervisorMapper.toJDBCEntity(supervisor);
-        var newSupervisor = supervisorRepository.save(entity);
-        return supervisorMapper.mapToDomainEntity(newSupervisor);
+        var entity = mapSupervisorToJDBCEntity(supervisor);
+        SupervisorJDBCEntity newSupervisor = supervisorRepository.save(entity);
+        return mapSupervisorToDomainEntity(newSupervisor);
     }
 
     @Override
-    public Supervisor load(Long id) {
-        Optional<SupervisorJDBCEntity> entity = supervisorRepository.findById(id);
-        return supervisorMapper.mapToDomainEntity(entity.orElseThrow());
+    public Optional<Supervisor> load(Long id) {
+        return supervisorRepository.findById(id)
+                .map(SupervisorMapper::mapSupervisorToDomainEntity);
+    }
+
+    @Override
+    public List<Supervisor> loadAll() {
+        return supervisorRepository.findAll()
+                .stream()
+                .map(SupervisorMapper::mapSupervisorToDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public boolean delete(Long supervisorId) {
+        if (supervisorRepository.existsById(supervisorId)) {
+            supervisorRepository.deleteById(supervisorId);
+            return true;
+        }
+        return false;
     }
 }

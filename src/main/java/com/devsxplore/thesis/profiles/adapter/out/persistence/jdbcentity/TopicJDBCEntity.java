@@ -5,6 +5,6 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @Table("TOPIC")
 public record TopicJDBCEntity(@Id Long id,
-                              String topic,
-                              String description)
-{}
+                              String title,
+                              String description) {
+}

@@ -1,99 +1,95 @@
 package com.devsxplore.thesis.profiles.adapter.in.web;
 
-import com.devsxplore.thesis.profiles.adapter.in.web.dto.SupervisorCreateDTO;
-import com.devsxplore.thesis.profiles.adapter.in.web.dto.TopicCreateDTO;
-import com.devsxplore.thesis.profiles.application.port.in.command.CreateSupervisorCommand;
-import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
-import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateSupervisorUseCase;
-import com.devsxplore.thesis.profiles.application.port.in.usecase.CreateTopicUseCase;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.FieldTagAddDTO;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.SupervisorCreateDTO;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.SupervisorUpdateDTO;
+import com.devsxplore.thesis.profiles.application.port.in.command.supervisor.FieldAddCommand;
+import com.devsxplore.thesis.profiles.application.port.in.command.topic.ShowTopicListCommand;
+import com.devsxplore.thesis.profiles.application.port.in.usecase.supervisor.*;
+import com.devsxplore.thesis.profiles.application.port.in.usecase.topic.TopicShowListUseCase;
 import com.devsxplore.thesis.profiles.domain.model.Supervisor;
 import com.devsxplore.thesis.profiles.domain.model.Topic;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPrimitive;
-import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPrimitive;
+import static com.devsxplore.thesis.profiles.adapter.in.web.mapper.request.SupervisorRequestMapper.generateSupervisorUpdateCommand;
+import static com.devsxplore.thesis.profiles.adapter.in.web.mapper.request.SupervisorRequestMapper.generateSupervisorDeleteCommand;
 
 @Controller
 @RequestMapping("/supervisor")
 @RequiredArgsConstructor
 public class SupervisorController {
 
-    private final CreateSupervisorUseCase supervisorUseCase;
-    private final CreateTopicUseCase topicUseCase;
-    private final ShowTopicListUseCase topicListUseCase;
-    private final EditTopicUseCase editTopicUseCase;
-    private final SaveChangesTopicUseCase saveChangesTopicUseCase;
+    private final SupervisorCreateUseCase supervisorCreateUseCase;
+    private final SupervisorUpdateUseCase supervisorUpdateUseCase;
+    private final SupervisorShowAllUseCase supervisorShowAllUseCase;
+    private final SupervisorDeleteUseCase supervisorDeleteUseCase;
+    private final TopicShowListUseCase topicListUseCase;
+    private final FieldAddUseCase fieldAddUseCase;
 
 
 //TODO:@ControllerAdvice aus Woche 4 Exceptions etc machen
 
 
     @GetMapping("/")
-    public String showStartPage(Model model){
+    public String showStartPage(Model model) {
         ShowTopicListCommand command = new ShowTopicListCommand(1L);
-        List<Topic> topics = topicListUseCase.showTopicList(command);
+        List<Topic> topics = topicListUseCase.loadTopicsBySupervisor(command);
         model.addAttribute("topics", topics);
         return "supervisormenu";
     }
 
-    @GetMapping("/editTopic/{topicId}")
-    public String editTopic(@PathVariable Long topicId, Model model){
-        EditTopicCommand command = new EditTopicCommand(1L, topicId);
-        Topic topic = editTopicUseCase.editTopic(command);
-        TopicForm topicForm = new TopicForm(topic.getId(), topic.getTitle(), topic.getDescription());
-        model.addAttribute("topic", topicForm);
-        return "topicedit";
+    @ResponseBody
+    @GetMapping("/all")
+    public List<Supervisor> loadAllSupervisors() {
+        return supervisorShowAllUseCase.showAllSupervisors();
     }
 
-    @PostMapping("/saveChange")
-    public String saveChange(TopicForm form){
-        SaveChangesTopicCommand command = new SaveChangesTopicCommand(1L, form.id(), form.topic(), form.description());
-        saveChangesTopicUseCase.saveChangesToTopic(command);
-        return "redirect:/supervisor/";
-
+    @ResponseBody
+    @GetMapping("/{id}")
+    public List<Supervisor> loadSupervisorById(@PathVariable("id") Long supervisorId) {
+        return supervisorShowAllUseCase.showAllSupervisors();
     }
 
+    @ResponseBody
+    @PostMapping("/create")
+    public Supervisor createSupervisor(SupervisorCreateDTO dto) {
+        return supervisorCreateUseCase.createSupervisor(
+                generateSupervisorUpdateCommand(dto)
+        );
+    }
+
+    @PutMapping("/update/{id}")
+    @ResponseBody
+    public Supervisor updateProfile(@PathVariable("id") Long supervisorId, SupervisorUpdateDTO dto) {
+        return supervisorUpdateUseCase.updateSupervisorProfile(
+                generateSupervisorUpdateCommand(supervisorId, dto)
+        );
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public boolean deleteProfile(@PathVariable("id") Long supervisorId) {
+        return supervisorDeleteUseCase.deleteSupervisor(
+                generateSupervisorDeleteCommand(supervisorId)
+        );
+    }
     @GetMapping("/topicform")
     public String showForm() {
         return "topicerstellen";
     }
 
+    @PostMapping("/fields/{id}")
     @ResponseBody
-    @PostMapping("/create")
-    public String createSupervisor(SupervisorCreateDTO dto) {
-        var name = nameFromPrimitive(
-                dto.firstName(),
-                dto.lastName(),
-                dto.title()
+    public void addFieldToProfile(@PathVariable("id") Long supervisorId, FieldTagAddDTO dto){
+        fieldAddUseCase.addFieldToSupervisor(
+                new FieldAddCommand(supervisorId, dto.fieldName())
         );
-        var contactDetails = contactFromPrimitive(
-                dto.email(),
-                dto.office(),
-                dto.phone()
-        );
-        CreateSupervisorCommand command = new CreateSupervisorCommand(name, contactDetails);
-        Supervisor supervisor = supervisorUseCase.createSupervisor(command);
-        return "Supervisor ID: " + supervisor.getId();
     }
 
-    @PostMapping("/createTopic")
-    public String createTopic(TopicCreateDTO form, RedirectAttributes redirectAttributes){
-        CreateTopicCommand command = new CreateTopicCommand(1L, form.topic(), form.description());
-        Topic topic = topicUseCase.createTopic(command);
-        redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
-        return "redirect:/supervisor/";
-    }
 
 }

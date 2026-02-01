@@ -1,4 +1,4 @@
-package com.devsxplore.thesis.profiles.application.port.in.command;
+package com.devsxplore.thesis.profiles.application.port.in.command.topic;
 
 public record CreateTopicCommand(Long supervisorId, String title, String description) {
     public CreateTopicCommand {

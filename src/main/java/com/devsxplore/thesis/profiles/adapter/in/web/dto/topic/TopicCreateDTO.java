@@ -1,10 +1,12 @@
-package com.devsxplore.thesis.profiles.adapter.in.web.dto;
+package com.devsxplore.thesis.profiles.adapter.in.web.dto.topic;
 
 import jakarta.validation.constraints.NotBlank;
 
 public record TopicCreateDTO (
         @NotBlank
-        String topic,
+        Long supervisorId,
+        @NotBlank
+        String title,
         @NotBlank
         String description
 ){}

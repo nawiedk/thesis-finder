@@ -1,57 +1,55 @@
 package com.devsxplore.thesis.profiles.adapter.out.persistence.mapper;
 
 import com.devsxplore.thesis.profiles.adapter.out.persistence.jdbcentity.SupervisorJDBCEntity;
-import com.devsxplore.thesis.profiles.adapter.out.persistence.jdbcentity.TopicJDBCEntity;
-import com.devsxplore.thesis.profiles.domain.model.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.devsxplore.thesis.profiles.domain.model.Contact;
+import com.devsxplore.thesis.profiles.domain.model.Name;
+import com.devsxplore.thesis.profiles.domain.model.Supervisor;
+import com.devsxplore.thesis.profiles.domain.model.SupervisorId;
 
-import java.util.List;
-
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.FieldTagMapper.mapFieldTagsToDomainEntities;
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.FieldTagMapper.mapFieldTagsToJDBCEntities;
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.TopicMapper.mapTopicsToDomainEntities;
+import static com.devsxplore.thesis.profiles.adapter.out.persistence.mapper.TopicMapper.mapTopicsToJDBCEntities;
 import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPrimitive;
 import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPrimitive;
 import static com.devsxplore.thesis.profiles.domain.model.Supervisor.createSupervisorWithId;
 
-@Component
-@RequiredArgsConstructor
 public class SupervisorMapper {
 
-    public Supervisor mapToDomainEntity(SupervisorJDBCEntity entity){
+    public static Supervisor mapSupervisorToDomainEntity(SupervisorJDBCEntity entity) {
+        Name name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
+        Contact contactDetails = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
 
-        var name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
-
-        var contact = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
-
-        var supervisor = createSupervisorWithId(
+        Supervisor supervisor = createSupervisorWithId(
                 new SupervisorId(entity.id()),
                 name,
-                contact
+                contactDetails
         );
 
-        List<Topic> topics = entity.topics().stream().map(TopicMapper::mapToDomainEntity).toList();
+        if (entity.fields() != null) {
+            mapFieldTagsToDomainEntities(entity.fields())
+                    .forEach(supervisor::addExistingFields);
+        }
 
-        //FIXME: bei Controller kam nullpointer exception da ich auf die id der topics zugegriffen habe,allerdings wird hier die Id nicht mit übertragen. deswegen ist es immer null
-        //FIXME: Deswegen habe ich in Supervisor neue Methode addTopicWithId hinzugefügt damit die ids mit rausgeladen werden wenn es zum domain objekt gemacht wird
-        //FIXME: Falls es zu Problemen kommt supervisor.addTopicWithId zu addTopic machen
-        topics.forEach(topic -> supervisor.addTopicWithId(topic.getId() ,topic.getTitle(), topic.getDescription()));
+        if (entity.topics() != null) {
+            mapTopicsToDomainEntities(entity.topics())
+                    .forEach(supervisor::addExistingTopic);
+        }
 
         return supervisor;
     }
 
-    public SupervisorJDBCEntity toJDBCEntity(Supervisor supervisor) {
-        List<TopicJDBCEntity> topicJDBCEntityList = supervisor.getTopics().stream()
-                .map(TopicMapper::toJDBCEntity)
-                .toList();
-
+    public static SupervisorJDBCEntity mapSupervisorToJDBCEntity(Supervisor entity) {
         return new SupervisorJDBCEntity(
-                supervisor.getId(),
-                supervisor.getAcademicTitle(),
-                supervisor.getFirstName(),
-                supervisor.getLastName(),
-                supervisor.getEmailAsString(),
-                supervisor.getOffice(),
-                supervisor.getPhone(),
-                topicJDBCEntityList
+                entity.getSupervisorId(),
+                entity.getAcademicTitle(),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getEmailAsString(),
+                entity.getOffice(),
+                entity.getPhone(),
+                mapFieldTagsToJDBCEntities(entity.getFields()),
+                mapTopicsToJDBCEntities(entity.getTopics())
         );
 
     }

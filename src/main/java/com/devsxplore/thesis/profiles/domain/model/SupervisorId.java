@@ -1,8 +1,8 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
-public record SupervisorId(Long id) {
+public record SupervisorId(Long supervisorId) {
     public SupervisorId {
-        if (id != null && id <= 0)
+        if (supervisorId != null && supervisorId <= 0)
             throw new IllegalArgumentException("Id must be positive");
 
     }

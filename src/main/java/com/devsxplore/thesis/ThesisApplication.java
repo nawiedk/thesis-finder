@@ -19,5 +19,4 @@ public class ThesisApplication {
             flyway.migrate();
         };
     }
-
 }

@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.List;
+import java.util.Set;
 
 @Table("SUPERVISOR")
 public record SupervisorJDBCEntity(@Id Long id,
@@ -14,6 +14,8 @@ public record SupervisorJDBCEntity(@Id Long id,
                                    String email,
                                    String office,
                                    String phone,
-                                   @MappedCollection(idColumn = "SUPERVISOR_ID", keyColumn = "SUPERVISOR_KEY")
-                                   List<TopicJDBCEntity> topics
+                                   @MappedCollection(idColumn = "SUPERVISOR_ID")
+                                   Set<FieldTagJDBCEntity> fields,
+                                   @MappedCollection(idColumn = "SUPERVISOR_ID")
+                                   Set<TopicJDBCEntity> topics
 ) {}

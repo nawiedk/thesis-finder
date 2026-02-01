@@ -1,4 +1,4 @@
-package com.devsxplore.thesis.profiles.adapter.in.web.dto;
+package com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -1,13 +1,14 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
+@SuppressWarnings("LombokGetterMayBeUsed")
 public class Topic {
-    private final TopicId id;
+    private final TopicId topicId;
     private String title;
     private String description;
 
-    private Topic(TopicId id, String title, String description) {
-        if (id == null) {
-            throw new IllegalArgumentException("");
+    private Topic(TopicId topicId, String title, String description) {
+        if (topicId == null) {
+            throw new IllegalArgumentException("Topic ID cannot be null");
         }
         if (title == null || title.isBlank()) {
             throw new IllegalArgumentException("Title cannot be blank");
@@ -15,42 +16,34 @@ public class Topic {
         if (description == null || description.isBlank()) {
             description = "";
         }
-
-        this.id = id;
+        this.topicId = topicId;
         this.title = title;
         this.description = description;
     }
 
-    public String getTitle() {
-        return title;
+    public static Topic createTopicWithoutId(String title, String description) {
+        return new Topic(TopicId.unassigned(), title, description);
     }
 
-    public Long getId() {
-        return id.id();
+    public static Topic createTopicWithId(TopicId topicId, String title, String description) {
+        return new Topic(topicId, title, description);
+    }
+
+    public Long getTopicId() {
+        return topicId.topicId();
     }
 
     public String getDescription() {
         return description;
     }
 
-    private void setTitle(String title){
-        this.title = title;
+    public String getTitle() {
+        return title;
     }
 
-    private void setDescription(String description){
-        this.description = description;
-    }
-
-    void updateTopic(String title, String description){
-        setTitle(title);
-        setDescription(description);
-    }
-
-    public static Topic createTopicWithoutId(String title, String description){
-        return new Topic(TopicId.unassigned(),title, description);
-    }
-
-    public static Topic createTopicWithId(TopicId id, String title, String description){
-        return new Topic(id, title, description);
+    public Topic updateTopic(String newTitle, String newDescription) {
+        title = newTitle == null ? title : newTitle;
+        description = newDescription == null ? description : newDescription;
+        return this;
     }
 }

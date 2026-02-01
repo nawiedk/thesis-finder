@@ -1,30 +1,34 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
-import com.devsxplore.thesis.profiles.adapter.out.persistence.adapterimpl.SupervisorPersistenceAdapter;
-import com.devsxplore.thesis.profiles.application.port.in.command.CreateTopicCommand;
-import com.devsxplore.thesis.profiles.application.service.SupervisorService;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithId;
+import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPrimitive;
+import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPrimitive;
 import static com.devsxplore.thesis.profiles.domain.model.Topic.createTopicWithoutId;
 
+@SuppressWarnings("LombokGetterMayBeUsed")
 public class Supervisor {
 
-    private final SupervisorId id;
-    private final Name name;
-    private final Contact contactDetails;
-    private final List<Topic> topics;
+    private final SupervisorId supervisorId;
+    private Name name;
+    private Contact contactDetails;
+    private final Set<FieldTag> fields;
+    private final Set<Topic> topics;
 
-    private Supervisor(SupervisorId id, Name name, Contact contactDetails) {
+    private Supervisor(SupervisorId supervisorId, Name name, Contact contactDetails) {
+        if (supervisorId == null) {
+            throw new IllegalArgumentException("Supervisor ID cannot be null");
+        }
         if (name == null || contactDetails == null) {
             throw new IllegalArgumentException("Name and contact details cannot be null");
         }
-        this.id = id;
+        this.supervisorId = supervisorId;
         this.name = name;
         this.contactDetails = contactDetails;
-        this.topics = new ArrayList<>();
+        fields = new HashSet<>();
+        topics = new HashSet<>();
     }
 
     public static Supervisor createSupervisorWithoutId(Name name, Contact contactDetails) {
@@ -35,8 +39,8 @@ public class Supervisor {
         return new Supervisor(id, name, contactDetails);
     }
 
-    public Long getId() {
-        return id.id();
+    public Long getSupervisorId() {
+        return supervisorId.supervisorId();
     }
 
     public String getFullName() {
@@ -59,55 +63,89 @@ public class Supervisor {
         return name.title().getAbbreviation();
     }
 
-    public String getEmailAsString(){
+    public String getEmailAsString() {
         return contactDetails.email().email();
     }
 
-    public String getPhone(){
+    public String getPhone() {
         return contactDetails.phone();
     }
 
-    public String getOffice(){
+    public String getOffice() {
         return contactDetails.office();
     }
 
-    public List<Topic> getTopics() {
-        return List.copyOf(topics);
+    public void updateProfile(String firstName, String lastName, String title,
+                              String email, String office, String phone) {
+        this.name = nameFromPrimitive(
+                (firstName == null || firstName.isBlank()) ? name.firstName() : firstName,
+                (lastName == null || lastName.isBlank()) ? name.lastName() : lastName,
+                (title == null || title.isBlank()) ? name.title().getAbbreviation() : title
+        );
+        this.contactDetails = contactFromPrimitive(
+                (email == null || email.isBlank()) ? contactDetails.email().email() : email,
+                (office == null || office.isBlank()) ? contactDetails.office() : office,
+                (phone == null || phone.isBlank()) ? contactDetails.phone() : phone
+        );
     }
 
-    public boolean addTopic(String title, String description){
+    public Set<FieldTag> getFields() {
+        return Set.copyOf(fields);
+    }
+
+    public Set<Topic> getTopics() {
+        return Set.copyOf(topics);
+    }
+
+    private boolean containsField(String fieldName) {
+        return fields.stream()
+                .anyMatch(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
+    }
+
+    public void addField(String fieldName) {
+        if (fieldName != null && !fieldName.isBlank() && !containsField(fieldName))
+            fields.add(new FieldTag(fieldName));
+    }
+
+    public void addFields(Set<String> fieldNames) {
+        if (fieldNames != null)
+            for (String fieldName : fieldNames)
+                this.addField(fieldName);
+    }
+
+    public boolean removeField(String fieldName) {
+        if (fieldName == null || fieldName.isBlank())
+            return false;
+        return fields.removeIf(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
+    }
+
+    public void addExistingFields(FieldTag field) {
+        this.fields.add(field);
+    }
+
+    public Topic addTopic(String title, String description) {
         Topic topic = createTopicWithoutId(title, description);
-        return topics.add(topic);
+        topics.add(topic);
+        return topic;
     }
 
-    public boolean addTopicWithId(Long id, String title, String description){
-        Topic topic = createTopicWithId(new TopicId(id), title, description);
-        return topics.add(topic);
+    public Topic updateTopic(Long topicId, String newTitle, String newDescription) {
+        Topic topic = findTopicByTopicId(topicId)
+                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+        return topic.updateTopic(newTitle, newDescription);
     }
 
-    public Topic editTopic(Long id, String title, String description){
-        for (Topic topic : topics){
-            if(topic.getId().equals(id)){
-                topic.updateTopic(title, description);
-                return topic;
-            }
-        }
-        return null;
+    public boolean removeTopic(Long topicId) {
+        return topics.removeIf(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId));
     }
 
-    public Long getTopicId(String title){
-        for (Topic topic : topics){
-            if(topic.getTitle().equals(title)){
-                return topic.getId();
-            }
-        }
-
-        return -1L;
-    }
-
-    public List<Topic> getTopicIdByTitle(String title){
+    private Optional<Topic> findTopicByTopicId(Long topicId) {
         return topics.stream()
-                .filter(topic -> topic.getTitle().equals(title))
-                .toList();
+                .filter(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId))
+                .findFirst();
+    }
+
+    public void addExistingTopic(Topic topic) {
+        topics.add(topic);
     }
 }

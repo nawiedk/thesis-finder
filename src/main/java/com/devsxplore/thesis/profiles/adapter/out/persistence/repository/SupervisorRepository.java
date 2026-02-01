@@ -4,6 +4,10 @@ import com.devsxplore.thesis.profiles.adapter.out.persistence.jdbcentity.Supervi
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface SupervisorRepository extends CrudRepository<SupervisorJDBCEntity, Long> {
+    @Override
+    List<SupervisorJDBCEntity> findAll();
 }

@@ -1,8 +1,8 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
-public record TopicId(Long id) {
+public record TopicId(Long topicId) {
     public TopicId{
-        if(id != null && id <= 0){
+        if(topicId != null && topicId <= 0){
             throw new IllegalArgumentException("Id must be positive");
         }
     }
