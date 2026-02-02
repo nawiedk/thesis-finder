@@ -35,7 +35,6 @@ public class TopicController {
         return topicLoadUseCase.loadAllTopics();
     }
 
-
     @PostMapping("/create")
     @ResponseBody
     public Topic createTopic(TopicCreateDTO dto, RedirectAttributes redirectAttributes){

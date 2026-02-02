@@ -23,15 +23,13 @@ public class SupervisorService implements
         TopicCreateUseCase,
         TopicShowListUseCase,
         TopicUpdateUseCase,
-        TopicSaveChangesUseCase,
         TopicLoadUseCase,
         SupervisorUpdateUseCase,
         TopicDeleteUseCase,
         SupervisorShowAllUseCase,
         SupervisorDeleteUseCase,
         SupervisorLoadUseCase,
-        FieldAddUseCase
-{
+        FieldAddUseCase {
 
     private final SupervisorRepositoryPort supervisorRepositoryPort;
 
@@ -43,16 +41,20 @@ public class SupervisorService implements
         );
         return supervisorRepositoryPort.save(supervisor);
     }
+    //CRUD -- Create Read Update Delete
 
     @Override
     public Topic createTopic(CreateTopicCommand command) {
         Supervisor supervisor = supervisorRepositoryPort.load(command.supervisorId())
                 .orElseThrow(() -> new IllegalArgumentException("Supervisor not found"));
 
-        Topic newTopic = supervisor.addTopic(command.title(), command.description());
-        supervisorRepositoryPort.save(supervisor);
-
-        return newTopic;
+        supervisor.addTopic(command.title(), command.description());
+        return supervisorRepositoryPort.save(supervisor)
+                .getTopics()
+                .stream()
+                .filter(topic -> topic.getTitle().equals(command.title()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
     }
 
     @Override
@@ -72,20 +74,6 @@ public class SupervisorService implements
         supervisorRepositoryPort.save(supervisor);
 
         return topic;
-    }
-
-    @Override
-    public Topic saveChangesToTopic(SaveChangesTopicCommand command) {
-        Supervisor supervisor = supervisorRepositoryPort.load(command.supervisorId())
-                .orElseThrow(() -> new IllegalArgumentException("Supervisor not found"));
-
-        supervisor.updateTopic(command.topicId(), command.title(), command.description());
-        supervisorRepositoryPort.save(supervisor);
-
-        return supervisor.getTopics().stream()
-                .filter(t -> t.getTopicId().equals(command.topicId()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
     }
 
     @Override
@@ -113,9 +101,9 @@ public class SupervisorService implements
 
         boolean removed = supervisor.removeTopic(command.topicId());
 
-        if (removed)
+        if (removed) {
             supervisorRepositoryPort.save(supervisor);
-
+        }
         return removed;
     }
 
