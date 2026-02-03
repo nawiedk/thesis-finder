@@ -20,9 +20,9 @@
     <tr th:each="themen:${topics}">
         <td th:text="${themen.title}"></td>
         <td th:text="${themen.description}"></td>
-        <td th:text="${themen.getId()}"></td>
+        <td th:text="${themen.getTopicId()}"></td>
         <td>
-            <form method="get" th:action="@{/supervisor/editTopic/{topicId}(topicId=${themen.getId()})}">
+            <form method="get" th:action="@{/supervisor/editTopic/{topicId}(topicId=${themen.getTopicId()})}">
                 <button type="submit">Bearbeiten</button>
             </form>
         </td><br>
