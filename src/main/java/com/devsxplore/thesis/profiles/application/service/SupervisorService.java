@@ -1,5 +1,7 @@
 package com.devsxplore.thesis.profiles.application.service;
 
+import com.devsxplore.thesis.profiles.adapter.in.web.TopicNotFoundException;
+import com.devsxplore.thesis.profiles.adapter.out.persistence.repository.SupervisorRepository;
 import com.devsxplore.thesis.profiles.application.port.in.command.supervisor.*;
 import com.devsxplore.thesis.profiles.application.port.in.command.topic.*;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.supervisor.*;
@@ -51,8 +53,10 @@ public class SupervisorService implements
 
         Topic newTopic = supervisor.addTopic(command.title(), command.description());
         supervisorRepositoryPort.save(supervisor);
-
         return newTopic;
+        //Modifikation damit fields und links hinzugefügt werden können
+
+
     }
 
     @Override
@@ -85,7 +89,7 @@ public class SupervisorService implements
         return supervisor.getTopics().stream()
                 .filter(t -> t.getTopicId().equals(command.topicId()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+                .orElseThrow(() -> new TopicNotFoundException("Thema mit Id '" + command.topicId() + "' konnte nicht bearbeitet werden."));
     }
 
     @Override
@@ -93,6 +97,15 @@ public class SupervisorService implements
         return supervisorRepositoryPort.loadAll().stream()
                 .flatMap(supervisor -> supervisor.getTopics().stream())
                 .toList();
+    }
+
+    @Override
+    public Topic loadSingleTopicById(LoadSingleTopicCommand command) {
+        Supervisor supervisor = supervisorRepositoryPort.load(command.supervisorId()).orElseThrow(() -> new IllegalArgumentException("Supervisor not found"));
+        return supervisor.getTopics().stream()
+                .filter(topic -> topic.getTopicId().equals(command.topicId()))
+                .findFirst()
+                .orElseThrow(() -> new TopicNotFoundException("Topic mit Id '" + command.topicId() + "' konnte nicht gefunden werden."));
     }
 
     @Override
@@ -109,7 +122,7 @@ public class SupervisorService implements
                 .filter(s -> s.getTopics().stream()
                         .anyMatch(t -> t.getTopicId().equals(command.topicId())))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+                .orElseThrow(() -> new TopicNotFoundException("Thema mit Id '" + command.topicId() + "' konnte nicht gelöscht werden."));
 
         boolean removed = supervisor.removeTopic(command.topicId());
 
@@ -134,7 +147,7 @@ public class SupervisorService implements
     @Override
     public Supervisor loadSupervisorById(SupervisorLoadCommand command) {
         return supervisorRepositoryPort.load(command.supervisorId())
-                .orElseThrow(() -> new IllegalArgumentException("Supervisor not found"));
+                .orElseThrow((() -> new IllegalArgumentException("Supervisor not found")));
     }
 
     @Override

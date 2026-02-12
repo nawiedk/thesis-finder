@@ -14,27 +14,29 @@
     <tr>
         <td>Name</td>
         <td>Beschreibung</td>
-        <td>ID</td>
     </tr>
     <tbody>
     <tr th:each="themen:${topics}">
         <td th:text="${themen.title}"></td>
-        <td th:text="${themen.description}"></td>
-        <td th:text="${themen.getId()}"></td>
         <td>
-            <form method="get" th:action="@{/supervisor/editTopic/{topicId}(topicId=${themen.getId()})}">
-                <button type="submit">Bearbeiten</button>
-            </form>
+            <a th:href="@{/topic/edit/{supervisorId}/{topicId}(supervisorId=1,topicId=${themen.topicId()})}" class="btn-primary">Bearbeiten</a>
         </td><br>
     </tr>
-
     </tbody>
     </thead>
 </table>
 
+<a href="/topic/topicform" class="btn-primary">Thema erstellen</a>
 
-<form th:action="@{/supervisor/topicform}" method="get">
-    <button name="themaerstellen">Thema erstellen</button>
-</form>
+<span th:if="${editSuccess}">Thema wurde erfolgreich bearbeitet.</span>
+
+<span th:if="${erfolgreichErstellt}">Thema erfolgreich erstellt.</span>
+
+<!--<form method="get" th:action="${/supervisor/{supervisorId}(supervisorId=1)">-->
+
+<!--</form>-->
+
+
 </body>
+
 </html>

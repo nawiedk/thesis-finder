@@ -1,6 +1,8 @@
 package com.devsxplore.thesis.profiles.application.port.in.command.topic;
 
-public record CreateTopicCommand(Long supervisorId, String title, String description) {
+import java.util.Set;
+
+public record CreateTopicCommand(Long supervisorId, String title, String description, Set<String> links, Set<String> fields) {
     public CreateTopicCommand {
         if (supervisorId == null || supervisorId < 1) {
             throw new IllegalArgumentException("Id must be positive");

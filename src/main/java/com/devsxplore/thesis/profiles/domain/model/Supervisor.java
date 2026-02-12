@@ -1,8 +1,11 @@
 package com.devsxplore.thesis.profiles.domain.model;
 
+import com.devsxplore.thesis.profiles.adapter.in.web.TopicNotFoundException;
+
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.devsxplore.thesis.profiles.domain.model.Contact.contactFromPrimitive;
 import static com.devsxplore.thesis.profiles.domain.model.Name.nameFromPrimitive;
@@ -147,5 +150,33 @@ public class Supervisor {
 
     public void addExistingTopic(Topic topic) {
         topics.add(topic);
+    }
+
+    public Topic addLinksToATopic(Long topicId, Set<String> links){
+        Topic loadedTopic = topics.stream()
+                .filter(topic -> topic.getTopicId().equals(topicId))
+                .findFirst()
+                .orElseThrow(() -> new TopicNotFoundException("Topic was not found with Id: " + topicId));
+
+        Set<Link> linksObjects = links.stream()
+                        .map(Link::new)
+                                .collect(Collectors.toSet());
+
+        loadedTopic.addLinksToTopic(linksObjects);
+        return loadedTopic;
+    }
+
+    public Topic addFieldToATopic(Long topicId, Set<String> fields){
+        Topic loadedTopic = topics.stream()
+                .filter(topic -> topic.getTopicId().equals(topicId))
+                .findFirst()
+                .orElseThrow(() -> new TopicNotFoundException("Topic was not found with Id: " + topicId));
+
+        Set<FieldTag> fieldObjects = fields.stream()
+                        .map(FieldTag::new)
+                                .collect(Collectors.toSet());
+
+        loadedTopic.addFieldToTopic(fieldObjects);
+        return loadedTopic;
     }
 }

@@ -13,12 +13,17 @@
 
 
 <h2>Thema erstellen.</h2>
-<form method="post" th:action="@{/supervisor/createTopic}">
-  <input type="hidden" name="id">
-  Titel <input name="topic" type="text"> <br>
-  Beschreibung <input name="description" type="text"> <br>
-  <button type="submit">Abschicken</button>
+<form method="post" th:action="@{/topic/create/extra}" th:object="${topic}">
+  <input type="hidden" th:field="*{supervisorId}">
+  <label for="title">Titel</label>
+  <input th:field="*{title}" type="text" id="title"> <br>
+  <label for="description">Beschreibung</label>
+  <input th:field="*{description}" type="text" id="description"> <br>
+  <button type="submit" id="abschicken">Weiter</button>
+  <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
 </form>
+
+<a href=""></a>
 
 <div th:if="${erfolgreichErstellt}">
   <p>Thema wurde erfolgreich erstellt.</p>

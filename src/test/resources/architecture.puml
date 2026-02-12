@@ -1,0 +1,33 @@
+@startuml
+[Domain Model] <<..domain..>>
+[Web] <<..in.web..>>
+[DB Verbindung] <<..out.persistence.repository..>>
+[Adapter] <<..port.out..>>
+[Services] <<..service..>>
+[Use Cases] <<..usecase..>>
+[AdapterImpl] <<..adapterimpl..>>
+[Command] <<..command..>>
+[JDBC Mappers] <<..mapper>>
+[JDBC Entities] <<..jdbcentity..>>
+
+
+[Domain Model] <-- [AdapterImpl]
+[Services] --> [Domain Model]
+[Web] --> [Use Cases]
+[Web] --> [Domain Model]
+[Adapter] <-- [AdapterImpl]
+[AdapterImpl] --> [DB Verbindung]
+[Services] --> [Use Cases]
+[Services] --> [Command]
+[Services] --> [Adapter]
+[Adapter] --> [Domain Model]
+[Use Cases] --> [Domain Model]
+[JDBC Mappers] --> [Domain Model]
+[JDBC Mappers] --> [JDBC Entities]
+[AdapterImpl] --> [JDBC Mappers]
+[DB Verbindung] --> [JDBC Entities]
+[Web] --> [Command]
+[Command] --> [Domain Model]
+[Use Cases] --> [Command]
+
+@enduml

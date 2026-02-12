@@ -3,18 +3,24 @@ package com.devsxplore.thesis.profiles.adapter.in.web;
 import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.FieldTagAddDTO;
 import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.SupervisorCreateDTO;
 import com.devsxplore.thesis.profiles.adapter.in.web.dto.supervisor.SupervisorUpdateDTO;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.topic.TopicCreateDTO;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.topic.TopicShowDTO;
+import com.devsxplore.thesis.profiles.adapter.in.web.dto.topic.TopicWebMapper;
 import com.devsxplore.thesis.profiles.application.port.in.command.supervisor.FieldAddCommand;
 import com.devsxplore.thesis.profiles.application.port.in.command.topic.ShowTopicListCommand;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.supervisor.*;
 import com.devsxplore.thesis.profiles.application.port.in.usecase.topic.TopicShowListUseCase;
 import com.devsxplore.thesis.profiles.domain.model.Supervisor;
 import com.devsxplore.thesis.profiles.domain.model.Topic;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.devsxplore.thesis.profiles.adapter.in.web.mapper.request.SupervisorRequestMapper.generateSupervisorUpdateCommand;
 import static com.devsxplore.thesis.profiles.adapter.in.web.mapper.request.SupervisorRequestMapper.generateSupervisorDeleteCommand;
@@ -38,7 +44,8 @@ public class SupervisorController {
     @GetMapping("/")
     public String showStartPage(Model model) {
         ShowTopicListCommand command = new ShowTopicListCommand(1L);
-        List<Topic> topics = topicListUseCase.loadTopicsBySupervisor(command);
+        List<Topic> topicsDomain = topicListUseCase.loadTopicsBySupervisor(command);
+        List<TopicShowDTO> topics = TopicWebMapper.toTopicShowDTOList(topicsDomain);
         model.addAttribute("topics", topics);
         return "supervisormenu";
     }
@@ -77,10 +84,6 @@ public class SupervisorController {
         return supervisorDeleteUseCase.deleteSupervisor(
                 generateSupervisorDeleteCommand(supervisorId)
         );
-    }
-    @GetMapping("/topicform")
-    public String showForm() {
-        return "topicerstellen";
     }
 
     @PostMapping("/fields/{id}")

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ka</title>
+</head>
+<body>
+  <h1>Extra Informationen</h1>
+
+  <form method="post" th:object="${topic}" th:action="@{/topic/create}">
+      <input type="hidden" th:value="${topic.supervisorId}">
+      <label for="title">Titel</label >
+      <input id="title" th:value="*{title}"> <br>
+      <label for="description">Beschreibung</label>
+      <input id="description" th:value="*{description}"> <br>
+      <label for="links">Link</label>
+      <input id="links" name="links">
+      <button type="submit" name="addLink" value="addLink">hinzufügen</button> <br>
+      <label for="field">Themenbereich</label>
+      <input id="field" name="field">
+      <button type="submit" name="addField" value="addField">hinzufügen</button> <br>
+      <button type="submit" name="create" value="create">Erstellen</button>
+  </form>
+
+Hinzugefügte Links:
+<ul th:each="link : ${topic.links}">
+    <li th:text="${link}">Keine hinzugefügt.</li>
+</ul>
+
+Themenbereiche:
+<ul th:each="field : ${topic.fields}">
+    <li th:text="${field}">Keine hinzugefügt</li>
+</ul>
+
+
+</body>
+</html>
