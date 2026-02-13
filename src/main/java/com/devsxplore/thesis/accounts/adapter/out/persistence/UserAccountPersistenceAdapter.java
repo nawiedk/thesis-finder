@@ -20,6 +20,8 @@ public class UserAccountPersistenceAdapter implements UserAccountRepositoryPort 
     @Override
     public UserAccount save(UserAccount account) {
         UserAccountJDBCEntity entity = mapUserAccountToJDBCEntity(account);
+        if (entity.getId() != null && repository.existsById(entity.getId()))
+            entity.setNew(false);
         UserAccountJDBCEntity saved = repository.save(entity);
         return mapUserAccountToDomainEntity(saved);
     }

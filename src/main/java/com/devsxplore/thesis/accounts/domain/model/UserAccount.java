@@ -13,7 +13,7 @@ public class UserAccount {
     private UserAccount(UserId userId, String login, String displayName, UserRole role, Instant lastLoginAt) {
         this.userId = Objects.requireNonNull(userId, "UserId must not be null");
         this.login = normalize(login);
-        this.displayName = normalize(displayName);
+        this.displayName = normalize(displayName) == null ? login : normalize(displayName);
         this.role = Objects.requireNonNull(role, "Role must not be null");
         this.lastLoginAt = lastLoginAt;
     }
@@ -40,6 +40,10 @@ public class UserAccount {
 
     public UserRole getRole() {
         return role;
+    }
+
+    public String getRoleAsString() {
+        return role.name();
     }
 
     public Instant getLastLoginAt() {

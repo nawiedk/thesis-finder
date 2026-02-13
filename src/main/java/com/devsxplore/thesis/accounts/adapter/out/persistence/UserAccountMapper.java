@@ -6,21 +6,21 @@ public class UserAccountMapper {
 
     public static UserAccount mapUserAccountToDomainEntity(UserAccountJDBCEntity entity) {
         return UserAccount.restore(
-                entity.githubId(),
-                entity.login(),
-                entity.displayName(),
-                entity.role(),
-                entity.lastLoginAt()
+                entity.getGithubId(),
+                entity.getLogin(),
+                entity.getDisplayName(),
+                entity.getRole(),
+                entity.getLastLoginAt()
         );
     }
 
     public static UserAccountJDBCEntity mapUserAccountToJDBCEntity(UserAccount account) {
-        return new UserAccountJDBCEntity(
-                account.getUserId(),
-                account.getLogin(),
-                account.getDisplayName(),
-                account.getRole().name(),
-                account.getLastLoginAt()
-        );
+        UserAccountJDBCEntity entity = new UserAccountJDBCEntity();
+        entity.setGithubId(account.getUserId());
+        entity.setLogin(account.getLogin());
+        entity.setDisplayName(account.getDisplayName());
+        entity.setRole(account.getRoleAsString());
+        entity.setLastLoginAt(account.getLastLoginAt());
+        return entity;
     }
 }

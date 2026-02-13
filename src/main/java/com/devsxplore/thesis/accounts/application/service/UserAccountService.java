@@ -1,5 +1,6 @@
 package com.devsxplore.thesis.accounts.application.service;
 
+import com.devsxplore.thesis.accounts.application.config.AccountSecurityProperties;
 import com.devsxplore.thesis.accounts.application.port.in.command.AssignUserRoleCommand;
 import com.devsxplore.thesis.accounts.application.port.in.command.LoadAccountCommand;
 import com.devsxplore.thesis.accounts.application.port.in.command.RegisterAccountCommand;
@@ -9,6 +10,7 @@ import com.devsxplore.thesis.accounts.application.port.in.usecase.LoadAccountUse
 import com.devsxplore.thesis.accounts.application.port.in.usecase.RegisterOrUpdateAccountUseCase;
 import com.devsxplore.thesis.accounts.application.port.out.UserAccountRepositoryPort;
 import com.devsxplore.thesis.accounts.domain.model.UserAccount;
+import com.devsxplore.thesis.accounts.domain.model.UserRole;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class UserAccountService implements
 
 
     private final UserAccountRepositoryPort userAccountRepositoryPort;
+    private final AccountSecurityProperties accountSecurityProperties;
 
     @Override
     public void assignRole(AssignUserRoleCommand command) {
@@ -49,14 +52,16 @@ public class UserAccountService implements
 
     @Override
     public UserAccount registerOrUpdate(RegisterAccountCommand command) {
-        String displayName = command.displayName() == null ? command.login() : command.displayName();
         UserAccount account = userAccountRepositoryPort.findById(command.githubId())
                 .orElseGet(() -> createUserAccountWithId(
                         command.githubId(),
                         command.login(),
-                        displayName
+                        command.displayName()
                 ));
-        account.updateProfile(command.login(), displayName);
+        account.updateProfile(command.login(), command.displayName());
+        if (accountSecurityProperties.isAdmin(account.getUserId())) {
+            account.assignRole(UserRole.ADMIN);
+        }
         return userAccountRepositoryPort.save(account);
     }
 }

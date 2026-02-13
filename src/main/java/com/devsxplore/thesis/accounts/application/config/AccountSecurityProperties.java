@@ -1,4 +1,4 @@
-package com.devsxplore.thesis.accounts.adapter.in.security;
+package com.devsxplore.thesis.accounts.application.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

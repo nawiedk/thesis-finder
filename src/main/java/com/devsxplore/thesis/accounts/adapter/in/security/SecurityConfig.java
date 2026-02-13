@@ -1,5 +1,6 @@
 package com.devsxplore.thesis.accounts.adapter.in.security;
 
+import com.devsxplore.thesis.accounts.application.config.AccountSecurityProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

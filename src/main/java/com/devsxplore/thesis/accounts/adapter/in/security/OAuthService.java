@@ -3,7 +3,6 @@ package com.devsxplore.thesis.accounts.adapter.in.security;
 import com.devsxplore.thesis.accounts.application.port.in.command.RegisterAccountCommand;
 import com.devsxplore.thesis.accounts.application.port.in.usecase.RegisterOrUpdateAccountUseCase;
 import com.devsxplore.thesis.accounts.domain.model.UserAccount;
-import com.devsxplore.thesis.accounts.domain.model.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +23,6 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
     private final DefaultOAuth2UserService defaultService = new DefaultOAuth2UserService();
     private final RegisterOrUpdateAccountUseCase registerOrUpdateAccountUseCase;
-    private final AccountSecurityProperties accountSecurityProperties;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -34,7 +32,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         var authorities = new HashSet<GrantedAuthority>();
 
         String githubLogin = readString(attributes.get("login"));
-        String githubName = readString(attributes.get("name")) == null ? githubLogin : readString(attributes.get("name"));
+        String githubName = readString(attributes.get("name"));
         Long githubId = readGithubId(attributes.get("id"));
 
         UserAccount account = registerOrUpdateAccountUseCase.registerOrUpdate(
@@ -43,11 +41,9 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
 
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        if (account.getRole() == UserRole.SUPERVISOR)
-            authorities.add(new SimpleGrantedAuthority("ROLE_SUPERVISOR"));
-
-        if (accountSecurityProperties.isAdmin(githubId) || account.getRole() == UserRole.ADMIN)
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if (account.getRole() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + account.getRoleAsString()));
+        }
 
         Map<String, Object> cleanAttributes = Map.of(
                 "id", githubId,
