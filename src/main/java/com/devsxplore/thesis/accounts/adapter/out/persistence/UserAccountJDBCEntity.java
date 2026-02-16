@@ -39,4 +39,8 @@ public class UserAccountJDBCEntity implements Persistable<Long> {
     public boolean isNew() {
         return isNew;
     }
+
+    public void markNotNew() {
+        this.isNew = false;
+    }
 }
