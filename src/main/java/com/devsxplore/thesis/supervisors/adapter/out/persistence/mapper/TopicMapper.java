@@ -13,7 +13,7 @@ public class TopicMapper {
 
     public static Topic mapTopicToDomainEntity(TopicJDBCEntity entity) {
         return createTopicWithId(
-                new TopicId(entity.id()),
+                new TopicId(entity.topicId()),
                 entity.title(),
                 entity.description());
     }

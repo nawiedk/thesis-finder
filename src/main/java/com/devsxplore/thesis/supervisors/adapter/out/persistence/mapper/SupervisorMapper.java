@@ -1,10 +1,8 @@
 package com.devsxplore.thesis.supervisors.adapter.out.persistence.mapper;
 
 import com.devsxplore.thesis.supervisors.adapter.out.persistence.jdbcentity.SupervisorJDBCEntity;
-import com.devsxplore.thesis.supervisors.domain.model.Contact;
-import com.devsxplore.thesis.supervisors.domain.model.Name;
-import com.devsxplore.thesis.supervisors.domain.model.Supervisor;
-import com.devsxplore.thesis.supervisors.domain.model.SupervisorId;
+import com.devsxplore.thesis.supervisors.domain.model.*;
+import org.springframework.stereotype.Component;
 
 import static com.devsxplore.thesis.supervisors.adapter.out.persistence.mapper.FieldTagMapper.mapFieldTagsToDomainEntities;
 import static com.devsxplore.thesis.supervisors.adapter.out.persistence.mapper.FieldTagMapper.mapFieldTagsToJDBCEntities;
@@ -14,14 +12,17 @@ import static com.devsxplore.thesis.supervisors.domain.model.Contact.contactFrom
 import static com.devsxplore.thesis.supervisors.domain.model.Name.nameFromPrimitive;
 import static com.devsxplore.thesis.supervisors.domain.model.Supervisor.createSupervisorWithId;
 
+@Component
 public class SupervisorMapper {
 
-    public static Supervisor mapSupervisorToDomainEntity(SupervisorJDBCEntity entity) {
+    public Supervisor mapSupervisorToDomainEntity(SupervisorJDBCEntity entity) {
         Name name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
         Contact contactDetails = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
 
         Supervisor supervisor = createSupervisorWithId(
-                new SupervisorId(entity.id()),
+                new SupervisorId(entity.supervisorId()),
+                new UserId(entity.userId()),
+                new PublicId(entity.publicId()),
                 name,
                 contactDetails
         );
@@ -39,9 +40,11 @@ public class SupervisorMapper {
         return supervisor;
     }
 
-    public static SupervisorJDBCEntity mapSupervisorToJDBCEntity(Supervisor entity) {
+    public SupervisorJDBCEntity mapSupervisorToJDBCEntity(Supervisor entity) {
         return new SupervisorJDBCEntity(
                 entity.getSupervisorId(),
+                entity.getUserID(),
+                entity.getPublicId(),
                 entity.getAcademicTitle(),
                 entity.getFirstName(),
                 entity.getLastName(),
