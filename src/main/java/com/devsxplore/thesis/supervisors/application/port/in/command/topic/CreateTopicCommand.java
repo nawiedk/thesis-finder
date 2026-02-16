@@ -1,8 +1,8 @@
 package com.devsxplore.thesis.supervisors.application.port.in.command.topic;
 
-public record CreateTopicCommand(Long supervisorId, String title, String description) {
+public record CreateTopicCommand(Long supervisorUserId, String title, String description) {
     public CreateTopicCommand {
-        if (supervisorId == null || supervisorId < 1) {
+        if (supervisorUserId == null || supervisorUserId < 1) {
             throw new IllegalArgumentException("Id must be positive");
         }
         if (title.isBlank()) {

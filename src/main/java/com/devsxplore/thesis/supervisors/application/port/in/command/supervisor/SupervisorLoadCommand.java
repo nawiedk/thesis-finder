@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record SupervisorLoadCommand(
         @NotNull
-        Long supervisorId
+        Long supervisorUserId
 ) {
 }

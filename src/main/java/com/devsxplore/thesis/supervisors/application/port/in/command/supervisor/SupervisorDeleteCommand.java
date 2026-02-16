@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record SupervisorDeleteCommand(
         @NotNull
-        Long supervisorId
+        Long supervisorUserId
 ) {
 }
