@@ -8,22 +8,25 @@ public class TopicBuilder {
     private String title;
     private String description;
 
-    public TopicBuilder addId(Long id){
+    public TopicBuilder addId(Long id) {
         this.id = id;
         return this;
     }
 
-    public TopicBuilder addTitle(String title){
+    public TopicBuilder addTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public TopicBuilder addDescription(String description){
+    public TopicBuilder addDescription(String description) {
         this.description = description;
         return this;
     }
 
-    public Topic build(){
+    public Topic build() {
+        if (this.id == null) {
+            return Topic.createTopicWithoutId(title, description);
+        }
         return Topic.createTopicWithId(new TopicId(id), title, description);
     }
 }
