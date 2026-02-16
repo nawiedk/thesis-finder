@@ -18,7 +18,7 @@ public record CurrentUser(
 ) implements OAuth2User {
 
     public CurrentUser {
-        Objects.requireNonNull(githubId, "githubId must not be null");
+        Objects.requireNonNull(githubId, "GitHub ID must not be null");
         Objects.requireNonNull(login, "login must not be null");
 
         authorities = Set.copyOf(authorities != null ? authorities : Set.of());
