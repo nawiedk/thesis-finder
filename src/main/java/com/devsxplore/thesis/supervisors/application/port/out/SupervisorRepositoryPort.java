@@ -7,7 +7,14 @@ import java.util.Optional;
 
 public interface SupervisorRepositoryPort {
     Supervisor save(Supervisor supervisor);
-    Optional<Supervisor> load(Long id);
+
+    Optional<Supervisor> load(Long supervisorId);
+
     List<Supervisor> loadAll();
+
     boolean delete(Long supervisorId);
+
+    boolean existsBySupervisorUserId(Long SupervisorUserId);
+
+    Optional<Supervisor> loadByUserId(Long userId);
 }
