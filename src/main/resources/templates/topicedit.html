@@ -3,17 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Thema Bearbeiten</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
 <body>
-    <h1>Thema Bearbeiten</h1>
-    <form th:action="@{/supervisor/saveChange}" method="post">
-        <input type="hidden" th:value="${topic.id}" name="id">
-        Name<input type="text" th:value="${topic.topic}" name="topic"> <br>
-        Beschreibung<input type="text" th:value="${topic.description}" name="description">
-        <button type="submit">Änderungen Speichern</button>
-    </form>
+<h1>Thema Bearbeiten</h1>
+<form method="post" th:action="@{/supervisor/saveChange}">
+    <input name="id" th:value="${topic.id}" type="hidden">
 
+    <div class="form-group">
+        <label for="topicName">Name</label>
+        <input class="form-control" id="topicName" name="topic" th:value="${topic.topic}" type="text">
+    </div>
 
+    <div class="form-group">
+        <label for="topicDescription">Beschreibung</label>
+        <input class="form-control" id="topicDescription" name="description" th:value="${topic.description}"
+               type="text">
+    </div>
+
+    <button class="btn btn-primary" type="submit">Änderungen Speichern</button>
+</form>
 </body>
 </html>

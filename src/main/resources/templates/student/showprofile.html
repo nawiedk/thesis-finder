@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+<h1>Dein Profil</h1>
+<div th:if="${student != null}">
+    Hallo <p th:text="${student.fullName}"></p>
+</div>
+<div th:unless="${student != null}">
+    <p>Profil konnte nicht geladen werden.</p>
+</div>
+
+
+</body>
+</html>

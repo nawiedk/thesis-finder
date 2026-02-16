@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>SupervisorMenu</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
 <body>
 
 <h1>Betreuende Menü</h1>
 <h2>Liste ihrer Themen:</h2>
-<table>
+<table class="table">
     <thead>
     <tr>
-        <td>Name</td>
-        <td>Beschreibung</td>
-        <td>ID</td>
+        <th>Name</th>
+        <th>Beschreibung</th>
+        <th>ID</th>
+        <th>Aktion</th>
     </tr>
+    </thead>
     <tbody>
     <tr th:each="themen:${topics}">
         <td th:text="${themen.title}"></td>
@@ -25,15 +28,13 @@
             <form method="get" th:action="@{/supervisor/editTopic/{topicId}(topicId=${themen.getTopicId()})}">
                 <button type="submit">Bearbeiten</button>
             </form>
-        </td><br>
+        </td>
     </tr>
-
     </tbody>
-    </thead>
 </table>
 
 
-<form th:action="@{/supervisor/topicform}" method="get">
+<form method="get" th:action="@{/supervisor/topicform}">
     <button name="themaerstellen">Thema erstellen</button>
 </form>
 </body>

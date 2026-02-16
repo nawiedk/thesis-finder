@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Thema Erstellen</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Thema Erstellen</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 </head>
 <body>
 <h1>Betreuende Menü</h1>
 
 <h2>Ihre Themen:</h2>
 
-
-
 <h2>Thema erstellen.</h2>
 <form method="post" th:action="@{/supervisor/createTopic}">
-  <input type="hidden" name="id">
-  Titel <input name="topic" type="text"> <br>
-  Beschreibung <input name="description" type="text"> <br>
-  <button type="submit">Abschicken</button>
+    <input name="id" type="hidden">
+
+    <div class="form-group">
+        <label for="newTopicTitle">Titel</label>
+        <input class="form-control" id="newTopicTitle" name="topic" type="text">
+    </div>
+
+    <div class="form-group">
+        <label for="newTopicDesc">Beschreibung</label>
+        <input class="form-control" id="newTopicDesc" name="description" type="text">
+    </div>
+
+    <button class="btn btn-primary" type="submit">Abschicken</button>
 </form>
 
-<div th:if="${erfolgreichErstellt}">
-  <p>Thema wurde erfolgreich erstellt.</p>
-</div>
+<!--<div th:if="${erfolgreichErstellt}">-->
+<!--  <p>Thema wurde erfolgreich erstellt.</p>-->
+<!--</div>-->
 
 </body>
 </html>
