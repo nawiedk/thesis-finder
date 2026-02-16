@@ -1,8 +1,6 @@
 package com.devsxplore.thesis.supervisors.domain.model;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.devsxplore.thesis.supervisors.domain.model.Contact.contactFromPrimitive;
 import static com.devsxplore.thesis.supervisors.domain.model.Name.nameFromPrimitive;
@@ -12,35 +10,41 @@ import static com.devsxplore.thesis.supervisors.domain.model.Topic.createTopicWi
 public class Supervisor {
 
     private final SupervisorId supervisorId;
-    private Name name;
-    private Contact contactDetails;
+    private final UserId userId;
+    private final PublicId publicId;
     private final Set<FieldTag> fields;
     private final Set<Topic> topics;
+    private Name name;
+    private Contact contactDetails;
 
-    private Supervisor(SupervisorId supervisorId, Name name, Contact contactDetails) {
-        if (supervisorId == null) {
-            throw new IllegalArgumentException("Supervisor ID cannot be null");
-        }
-        if (name == null || contactDetails == null) {
-            throw new IllegalArgumentException("Name and contact details cannot be null");
-        }
-        this.supervisorId = supervisorId;
-        this.name = name;
-        this.contactDetails = contactDetails;
+    private Supervisor(SupervisorId supervisorId, UserId userId, PublicId publicId, Name name, Contact contactDetails) {
+        this.supervisorId = Objects.requireNonNull(supervisorId, "Supervisor ID cannot be null");
+        this.userId = Objects.requireNonNull(userId, "UserID cannot be null");
+        this.publicId = Objects.requireNonNull(publicId, "Public ID cannot be null");
+        this.name = Objects.requireNonNull(name, "Name cannot be null");
+        this.contactDetails = Objects.requireNonNull(contactDetails, "Contact details cannot be null");
         fields = new HashSet<>();
         topics = new HashSet<>();
     }
 
-    public static Supervisor createSupervisorWithoutId(Name name, Contact contactDetails) {
-        return new Supervisor(SupervisorId.unassigned(), name, contactDetails);
+    public static Supervisor createSupervisorWithoutId(UserId userId, Name name, Contact contactDetails) {
+        return new Supervisor(SupervisorId.unassigned(), userId, PublicId.generate(), name, contactDetails);
     }
 
-    public static Supervisor createSupervisorWithId(SupervisorId id, Name name, Contact contactDetails) {
-        return new Supervisor(id, name, contactDetails);
+    public static Supervisor createSupervisorWithId(SupervisorId id, UserId userId, PublicId publicId, Name name, Contact contactDetails) {
+        return new Supervisor(id, userId, publicId, name, contactDetails);
+    }
+
+    public UUID getPublicId() {
+        return publicId.uuid();
     }
 
     public Long getSupervisorId() {
         return supervisorId.supervisorId();
+    }
+
+    public Long getUserID() {
+        return userId.userId();
     }
 
     public String getFullName() {
@@ -98,6 +102,7 @@ public class Supervisor {
     }
 
     private boolean containsField(String fieldName) {
+        if (fields.isEmpty()) return false;
         return fields.stream()
                 .anyMatch(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
     }

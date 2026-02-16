@@ -1,11 +1,18 @@
 package com.devsxplore.thesis.supervisors.domain.model;
 
+import java.util.Objects;
+
 public record Name(String firstName, String lastName, AcademicTitle title) {
     public Name {
-        if (firstName == null || firstName.isBlank())
-            throw new IllegalArgumentException("First fieldName cannot be null or empty");
-        if (lastName == null || lastName.isBlank())
-            throw new IllegalArgumentException("Last fieldName cannot be null or empty");
+        Objects.requireNonNull(firstName, "Vorname darf nicht null sein");
+        Objects.requireNonNull(lastName, "Nachname darf nicht null sein");
+
+        if (firstName.isBlank()) {
+            throw new IllegalArgumentException("Vorname darf nicht leer sein");
+        }
+        if (lastName.isBlank()) {
+            throw new IllegalArgumentException("Nachname darf nicht leer sein");
+        }
         firstName = firstName.trim();
         lastName = lastName.trim();
         if (title == null)

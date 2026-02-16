@@ -1,12 +1,10 @@
 package com.devsxplore.thesis.supervisors.domain.model;
 
-import java.util.regex.Pattern;
-
 public record Contact(Email email, String office, String phone) {
 
-    private static final Pattern PHONE_PATTERN = Pattern.compile(
-            "^(?:\\+49|0)[1-9][\\d\\s/-]{5,20}$"
-    );
+//    private static final Pattern PHONE_PATTERN = Pattern.compile(
+//            "^(?:\\+49|0)[1-9][\\d\\s/-]{5,20}$"
+//    );
 
     public Contact {
         if (email == null)
@@ -19,8 +17,8 @@ public record Contact(Email email, String office, String phone) {
             phone = "";
         else {
             phone = phone.trim();
-            if (!PHONE_PATTERN.matcher(phone).matches())
-                throw new IllegalArgumentException("Invalid phone number");
+//            if (!PHONE_PATTERN.matcher(phone).matches())
+//                throw new IllegalArgumentException("Invalid phone number");
         }
     }
 
