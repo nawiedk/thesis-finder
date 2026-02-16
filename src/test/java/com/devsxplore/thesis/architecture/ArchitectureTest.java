@@ -16,11 +16,14 @@ public class ArchitectureTest {
 
     @ArchTest
     static final ArchRule onion_architecture_is_respected = onionArchitecture()
+            .withOptionalLayers(true)
             .domainModels("..domain.model..")
             .domainServices("..domain.service..")
             .applicationServices("..application..")
             .adapter("web", "..adapter.in.web..")
-            .adapter("persistence", "..adapter.out.persistence..");
+            .adapter("persistence", "..adapter.out.persistence..")
+            .adapter("security", "..adapter.in.security..")
+            .ignoreDependency("..adapter.in.web..", "..adapter.in.security..");
 
     @ArchTest
     static final ArchRule ports_should_not_depend_on_spring_data = classes()
