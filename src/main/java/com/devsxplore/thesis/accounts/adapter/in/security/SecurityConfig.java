@@ -19,6 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity chainBuilder) {
         return chainBuilder.authorizeHttpRequests(configurer -> configurer
                         .requestMatchers("/", "/error", "/css/**", "/img/**", "/.well-known/**", "/js/**").permitAll()
+                        .requestMatchers("/student/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
                 )
                 .logout(l -> l.
