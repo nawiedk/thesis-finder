@@ -13,29 +13,29 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentPersistenceAdapter implements StudentRepositoryPort {
 
-    private final StudentRepository studentRepository;
-    private final StudentMapper studentMapper;
+	private final StudentRepository studentRepository;
 
-    @Override
-    public Student save(Student student) {
-        StudentJDBCEntity entity = studentRepository.save(studentMapper.mapStudentToJDBCEntity(student));
-        return studentMapper.mapStudentToDomainEntity(entity);
-    }
+	private final StudentMapper studentMapper;
 
-    @Override
-    public Optional<Student> load(Long studentId) {
-        return studentRepository.findById(studentId)
-                .map(studentMapper::mapStudentToDomainEntity);
-    }
+	@Override
+	public Student save(Student student) {
+		StudentJDBCEntity entity = studentRepository.save(studentMapper.mapStudentToJDBCEntity(student));
+		return studentMapper.mapStudentToDomainEntity(entity);
+	}
 
-    @Override
-    public Optional<Student> loadByStudentUserId(Long studentUserId) {
-        return studentRepository.findByStudentUserId(studentUserId)
-                .map(studentMapper::mapStudentToDomainEntity);
-    }
+	@Override
+	public Optional<Student> load(Long studentId) {
+		return studentRepository.findById(studentId).map(studentMapper::mapStudentToDomainEntity);
+	}
 
-    @Override
-    public boolean existsByStudentUserId(Long studentUserId) {
-        return studentRepository.existsByStudentUserId(studentUserId);
-    }
+	@Override
+	public Optional<Student> loadByStudentUserId(Long studentUserId) {
+		return studentRepository.findByStudentUserId(studentUserId).map(studentMapper::mapStudentToDomainEntity);
+	}
+
+	@Override
+	public boolean existsByStudentUserId(Long studentUserId) {
+		return studentRepository.existsByStudentUserId(studentUserId);
+	}
+
 }

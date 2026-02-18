@@ -22,46 +22,41 @@ import static com.devsxplore.thesis.accounts.domain.model.UserAccount.createUser
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserAccountService implements
-        AssignUserRoleUseCase,
-        ListAccountsUseCase,
-        LoadAccountUseCase,
-        RegisterOrUpdateAccountUseCase {
+public class UserAccountService
+		implements AssignUserRoleUseCase, ListAccountsUseCase, LoadAccountUseCase, RegisterOrUpdateAccountUseCase {
 
+	private final UserAccountRepositoryPort userAccountRepositoryPort;
 
-    private final UserAccountRepositoryPort userAccountRepositoryPort;
-    private final AccountSecurityProperties accountSecurityProperties;
+	private final AccountSecurityProperties accountSecurityProperties;
 
-    @Override
-    public void assignRole(AssignUserRoleCommand command) {
-        UserAccount account = userAccountRepositoryPort.findById(command.githubId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        account.assignRole(command.role());
-        userAccountRepositoryPort.save(account);
-    }
+	@Override
+	public void assignRole(AssignUserRoleCommand command) {
+		UserAccount account = userAccountRepositoryPort.findById(command.githubId())
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		account.assignRole(command.role());
+		userAccountRepositoryPort.save(account);
+	}
 
-    @Override
-    public List<UserAccount> loadAll() {
-        return userAccountRepositoryPort.findAll();
-    }
+	@Override
+	public List<UserAccount> loadAll() {
+		return userAccountRepositoryPort.findAll();
+	}
 
-    @Override
-    public UserAccount loadById(LoadAccountCommand command) {
-        return userAccountRepositoryPort.findById(command.githubId()).orElseThrow(() -> new IllegalArgumentException("User not found"));
-    }
+	@Override
+	public UserAccount loadById(LoadAccountCommand command) {
+		return userAccountRepositoryPort.findById(command.githubId())
+			.orElseThrow(() -> new IllegalArgumentException("User not found"));
+	}
 
-    @Override
-    public UserAccount registerOrUpdate(RegisterAccountCommand command) {
-        UserAccount account = userAccountRepositoryPort.findById(command.githubId())
-                .orElseGet(() -> createUserAccountWithId(
-                        command.githubId(),
-                        command.login(),
-                        command.displayName()
-                ));
-        account.updateProfile(command.login(), command.displayName());
-        if (accountSecurityProperties.isAdmin(account.getUserId())) {
-            account.assignRole(UserRole.ADMIN);
-        }
-        return userAccountRepositoryPort.save(account);
-    }
+	@Override
+	public UserAccount registerOrUpdate(RegisterAccountCommand command) {
+		UserAccount account = userAccountRepositoryPort.findById(command.githubId())
+			.orElseGet(() -> createUserAccountWithId(command.githubId(), command.login(), command.displayName()));
+		account.updateProfile(command.login(), command.displayName());
+		if (accountSecurityProperties.isAdmin(account.getUserId())) {
+			account.assignRole(UserRole.ADMIN);
+		}
+		return userAccountRepositoryPort.save(account);
+	}
+
 }

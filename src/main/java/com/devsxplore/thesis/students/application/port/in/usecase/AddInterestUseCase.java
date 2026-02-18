@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.ChangeInterest
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface AddInterestUseCase {
-    Student addInterest(ChangeInterestCommand command);
+
+	Student addInterest(ChangeInterestCommand command);
+
 }

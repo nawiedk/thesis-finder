@@ -4,5 +4,7 @@ import com.devsxplore.thesis.supervisors.application.port.in.command.supervisor.
 import com.devsxplore.thesis.supervisors.domain.model.Supervisor;
 
 public interface LoadByUserIdUseCase {
-    Supervisor loadSupervisor(LoadByUserIdCommand command);
+
+	Supervisor loadByUserId(LoadByUserIdCommand command);
+
 }

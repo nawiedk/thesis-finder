@@ -4,5 +4,7 @@ import com.devsxplore.thesis.accounts.application.port.in.command.RegisterAccoun
 import com.devsxplore.thesis.accounts.domain.model.UserAccount;
 
 public interface RegisterOrUpdateAccountUseCase {
-    UserAccount registerOrUpdate(RegisterAccountCommand command);
+
+	UserAccount registerOrUpdate(RegisterAccountCommand command);
+
 }

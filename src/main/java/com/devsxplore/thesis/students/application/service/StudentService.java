@@ -18,87 +18,77 @@ import static com.devsxplore.thesis.students.domain.model.Student.createStudentW
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class StudentService implements
-        RegisterStudentUseCase,
-        LoadStudentUseCase,
-        LoadStudentByUserIdUseCase,
-        AddCourseUseCase,
-        UpdateStudentProfileUseCase,
-        RemoveCourseUseCase,
-        AddInterestUseCase,
-        RemoveInterestUseCase {
+public class StudentService implements RegisterStudentUseCase, LoadStudentUseCase, LoadStudentByUserIdUseCase,
+		AddCourseUseCase, UpdateStudentProfileUseCase, RemoveCourseUseCase, AddInterestUseCase, RemoveInterestUseCase {
 
-    private final StudentRepositoryPort studentRepositoryPort;
-    private final AssignUserRoleUseCase assignUserRoleUseCase;
+	private final StudentRepositoryPort studentRepositoryPort;
 
-    @Override
-    public Student registerStudent(RegisterStudentCommand command) {
-        if (studentRepositoryPort.existsByStudentUserId(command.studentUserId()))
-            throw new IllegalArgumentException("Du bist bereits registriert!");
-        Student student = createStudentWithoutId(
-                StudentUserId.of(command.studentUserId()),
-                new Name(command.firstName(), command.lastName())
-        );
+	private final AssignUserRoleUseCase assignUserRoleUseCase;
 
-        Student savedStudent = studentRepositoryPort.save(student);
+	@Override
+	public Student registerStudent(RegisterStudentCommand command) {
+		if (studentRepositoryPort.existsByStudentUserId(command.studentUserId()))
+			throw new IllegalArgumentException("Du bist bereits registriert!");
+		Student student = createStudentWithoutId(StudentUserId.of(command.studentUserId()),
+				new Name(command.firstName(), command.lastName()));
 
-        assignUserRoleUseCase.assignRole(new AssignUserRoleCommand(
-                command.studentUserId(),
-                UserRole.STUDENT
-        ));
+		Student savedStudent = studentRepositoryPort.save(student);
 
-        return savedStudent;
-    }
+		assignUserRoleUseCase.assignRole(new AssignUserRoleCommand(command.studentUserId(), UserRole.STUDENT));
 
-    @Override
-    public Student loadStudentByStudentUserId(LoadStudentByUserIdCommand command) {
-        return studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-    }
+		return savedStudent;
+	}
 
-    @Override
-    public Student loadStudent(LoadStudentCommand command) {
-        return studentRepositoryPort.load(command.studentId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-    }
+	@Override
+	public Student loadStudentByStudentUserId(LoadStudentByUserIdCommand command) {
+		return studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+	}
 
-    @Override
-    public Student addCourse(ChangeCourseCommand command) {
-        Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        student.addCourse(command.course());
-        return studentRepositoryPort.save(student);
-    }
+	@Override
+	public Student loadStudent(LoadStudentCommand command) {
+		return studentRepositoryPort.load(command.studentId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+	}
 
-    @Override
-    public Student updateProfile(UpdateStudentProfileCommand command) {
-        Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        student.updateProfile(command.firstName(), command.lastName());
-        return studentRepositoryPort.save(student);
-    }
+	@Override
+	public Student addCourse(ChangeCourseCommand command) {
+		Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+		student.addCourse(command.course());
+		return studentRepositoryPort.save(student);
+	}
 
-    @Override
-    public Student removeCourse(ChangeCourseCommand command) {
-        Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        student.removeCourse(command.course());
-        return studentRepositoryPort.save(student);
-    }
+	@Override
+	public Student updateProfile(UpdateStudentProfileCommand command) {
+		Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+		student.updateProfile(command.firstName(), command.lastName());
+		return studentRepositoryPort.save(student);
+	}
 
-    @Override
-    public Student addInterest(ChangeInterestCommand command) {
-        Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        student.addInterest(command.interest());
-        return studentRepositoryPort.save(student);
-    }
+	@Override
+	public Student removeCourse(ChangeCourseCommand command) {
+		Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+		student.removeCourse(command.course());
+		return studentRepositoryPort.save(student);
+	}
 
-    @Override
-    public Student removeInterest(ChangeInterestCommand command) {
-        Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
-                .orElseThrow(() -> new IllegalArgumentException("Student not found"));
-        student.removeInterest(command.interest());
-        return studentRepositoryPort.save(student);
-    }
+	@Override
+	public Student addInterest(ChangeInterestCommand command) {
+		Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+		student.addInterest(command.interest());
+		return studentRepositoryPort.save(student);
+	}
+
+	@Override
+	public Student removeInterest(ChangeInterestCommand command) {
+		Student student = studentRepositoryPort.loadByStudentUserId(command.studentUserId())
+			.orElseThrow(() -> new IllegalArgumentException("Student not found"));
+		student.removeInterest(command.interest());
+		return studentRepositoryPort.save(student);
+	}
+
 }

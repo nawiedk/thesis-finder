@@ -1,5 +1,7 @@
 package com.devsxplore.thesis.accounts.adapter.in.security;
 
+import java.util.HashSet;
+import java.util.Map;
 import com.devsxplore.thesis.accounts.application.port.in.command.RegisterAccountCommand;
 import com.devsxplore.thesis.accounts.application.port.in.usecase.RegisterOrUpdateAccountUseCase;
 import com.devsxplore.thesis.accounts.domain.model.UserAccount;
@@ -13,55 +15,47 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Map;
-
-
 @Service
 @RequiredArgsConstructor
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final DefaultOAuth2UserService defaultService = new DefaultOAuth2UserService();
-    private final RegisterOrUpdateAccountUseCase registerOrUpdateAccountUseCase;
+	private final DefaultOAuth2UserService defaultService = new DefaultOAuth2UserService();
 
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oAuth2User = defaultService.loadUser(userRequest);
+	private final RegisterOrUpdateAccountUseCase registerOrUpdateAccountUseCase;
 
-        var attributes = oAuth2User.getAttributes();
-        var authorities = new HashSet<GrantedAuthority>();
+	@Override
+	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+		OAuth2User oAuth2User = this.defaultService.loadUser(userRequest);
 
-        String githubLogin = readString(attributes.get("login"));
-        String githubName = readString(attributes.get("name"));
-        Long githubId = readGithubId(attributes.get("id"));
+		var attributes = oAuth2User.getAttributes();
+		var authorities = new HashSet<GrantedAuthority>();
 
-        UserAccount account = registerOrUpdateAccountUseCase.registerOrUpdate(
-                new RegisterAccountCommand(githubId, githubLogin, githubName)
-        );
+		String githubLogin = readString(attributes.get("login"));
+		String githubName = readString(attributes.get("name"));
+		Long githubId = readGithubId(attributes.get("id"));
 
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+		UserAccount account = this.registerOrUpdateAccountUseCase
+			.registerOrUpdate(new RegisterAccountCommand(githubId, githubLogin, githubName));
 
-        if (account.getRole() != null) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + account.getRoleAsString()));
-        }
+		authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        Map<String, Object> cleanAttributes = Map.of(
-                "id", githubId,
-                "login", githubLogin,
-                "name", githubName
-        );
+		if (account.getRole() != null) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_" + account.getRoleAsString()));
+		}
+		Map<String, Object> cleanAttributes = Map.of("id", githubId, "login", githubLogin, "name", githubName);
 
-        return new CurrentUser(githubId, githubLogin, githubName, cleanAttributes, authorities);
-    }
+		return new CurrentUser(githubId, githubLogin, githubName, cleanAttributes, authorities);
+	}
 
-    private Long readGithubId(Object id) {
-        if (id instanceof Number number)
-            return number.longValue();
-        throw new IllegalArgumentException("GitHub id is missing");
-    }
+	private Long readGithubId(Object id) {
+		if (id instanceof Number number) {
+			return number.longValue();
+		}
+		throw new IllegalArgumentException("GitHub id is missing");
+	}
 
-    private String readString(Object value) {
-        return value == null ? null : String.valueOf(value);
-    }
+	private String readString(Object value) {
+		return value == null ? null : String.valueOf(value);
+	}
 
 }

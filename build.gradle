@@ -2,6 +2,8 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.1'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'io.spring.javaformat' version '0.0.47'
+    id "checkstyle"
 }
 
 group = 'com.devsxplore'
@@ -35,6 +37,7 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     implementation 'org.jsoup:jsoup:1.22.1'
     implementation 'jakarta.transaction:jakarta.transaction-api:2.0.1'
+    checkstyle 'io.spring.javaformat:spring-javaformat-checkstyle:0.0.47'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -60,3 +63,9 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+checkstyle {
+    toolVersion = "13.2.0"
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+}
+

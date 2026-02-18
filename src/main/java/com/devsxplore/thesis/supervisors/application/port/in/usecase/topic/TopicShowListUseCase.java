@@ -6,5 +6,7 @@ import com.devsxplore.thesis.supervisors.domain.model.Topic;
 import java.util.List;
 
 public interface TopicShowListUseCase {
-    public List<Topic> loadTopicsBySupervisor(ShowTopicListCommand command);
+
+	public List<Topic> loadTopicsBySupervisor(ShowTopicListCommand command);
+
 }

@@ -4,14 +4,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record UpdateStudentProfileCommand(
-        @NotNull @Positive(message = "User ID muss positiv sein")
-        Long studentUserId,
+public record UpdateStudentProfileCommand(@NotNull @Positive(message = "User ID muss positiv sein") Long studentUserId,
 
-        @NotBlank
-        String firstName,
+		@NotBlank String firstName,
 
-        @NotBlank
-        String lastName
-) {
+		@NotBlank String lastName) {
 }

@@ -4,5 +4,7 @@ import com.devsxplore.thesis.accounts.application.port.in.command.LoadAccountCom
 import com.devsxplore.thesis.accounts.domain.model.UserAccount;
 
 public interface LoadAccountUseCase {
-    UserAccount loadById(LoadAccountCommand command);
+
+	UserAccount loadById(LoadAccountCommand command);
+
 }

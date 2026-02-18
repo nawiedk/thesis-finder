@@ -10,23 +10,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class StudentRequestMapper {
 
-    public RegisterStudentCommand mapToRegisterStudentCommand(Long studentUserId, RegisterStudentDTO dto) {
-        return new RegisterStudentCommand(studentUserId, dto.firstName(), dto.lastName());
-    }
+	public RegisterStudentCommand mapToRegisterStudentCommand(Long studentUserId, RegisterStudentDTO dto) {
+		return new RegisterStudentCommand(studentUserId, dto.firstName(), dto.lastName());
+	}
 
-    public LoadStudentByUserIdCommand mapToLoadStudentByUserIdCommand(Long studenUserId) {
-        return new LoadStudentByUserIdCommand(studenUserId);
-    }
+	public LoadStudentByUserIdCommand mapToLoadStudentByUserIdCommand(Long studenUserId) {
+		return new LoadStudentByUserIdCommand(studenUserId);
+	}
 
-    public UpdateStudentProfileCommand mapToUpdateStudentProfileCommand(Long studentUserId, UpdateStudentProfileDTO dto) {
-        return new UpdateStudentProfileCommand(studentUserId, dto.firstName(), dto.lastName());
-    }
+	public UpdateStudentProfileCommand mapToUpdateStudentProfileCommand(Long studentUserId,
+			UpdateStudentProfileDTO dto) {
+		return new UpdateStudentProfileCommand(studentUserId, dto.firstName(), dto.lastName());
+	}
 
-    public ChangeCourseCommand mapToChangeCourseCommand(Long studentUserId, ChangeCourseDTO dto) {
-        return new ChangeCourseCommand(studentUserId, dto.course());
-    }
+	public ChangeCourseCommand mapToChangeCourseCommand(Long studentUserId, ChangeCourseDTO dto) {
+		return new ChangeCourseCommand(studentUserId, dto.course());
+	}
 
-    public ChangeInterestCommand mapToChangeInterestCommand(Long studentUserId, ChangeInterestDTO dto) {
-        return new ChangeInterestCommand(studentUserId, dto.interest());
-    }
+	public ChangeInterestCommand mapToChangeInterestCommand(Long studentUserId, ChangeInterestDTO dto) {
+		return new ChangeInterestCommand(studentUserId, dto.interest());
+	}
+
 }

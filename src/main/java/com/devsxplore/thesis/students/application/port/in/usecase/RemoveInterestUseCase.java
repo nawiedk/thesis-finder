@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.ChangeInterest
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface RemoveInterestUseCase {
-    Student removeInterest(ChangeInterestCommand command);
+
+	Student removeInterest(ChangeInterestCommand command);
+
 }

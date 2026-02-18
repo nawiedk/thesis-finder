@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Fehler - Game of Advisors</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #006ab3;
+        }
+
+        .bg-primary-custom {
+            background-color: var(--primary-blue) !important;
+        }
+
+        .text-primary-custom {
+            color: var(--primary-blue) !important;
+        }
+
+        .btn-primary-custom {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #005691;
+            color: white;
+        }
+
+        .error-card {
+            max-width: 600px;
+            margin-top: 80px;
+            border-top: 5px solid var(--primary-blue);
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary-custom mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            Game of Advisors
+        </a>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="error-card mx-auto bg-white p-5 rounded shadow">
+        <header class="text-center mb-4">
+            <h1 class="display-5 text-primary-custom fw-bold">Systemhinweis</h1>
+            <p class="lead text-muted">Die angeforderte Seite konnte nicht geladen werden.</p>
+        </header>
+
+        <div class="alert alert-danger" role="alert" th:if="${errorMsg}">
+            <h2 class="h5 alert-heading">Fehlermeldung:</h2>
+            <p th:text="${errorMsg}">Ein unbekannter Fehler ist aufgetreten.</p>
+        </div>
+
+        <div class="alert alert-warning border-0 bg-light" role="alert" th:unless="${errorMsg}">
+            <p class="mb-0">Es liegt ein technisches Problem vor. Bitte prüfen Sie Ihre Eingaben oder kontaktieren Sie den nicht vorhandenen Support, falls das Problem bestehen bleibt.</p>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-grid gap-2">
+            <a class="btn btn-primary-custom btn-lg" href="/">Zurück zur Startseite</a>
+            <button class="btn btn-outline-secondary" onclick="history.back()">Zur vorherigen Seite</button>
+        </div>
+    </div>
+    <div class="mt-5 p-4 border rounded bg-light text-center"
+         style="position: relative; overflow: hidden; min-height: 150px;">
+        <p class="text-muted small">Benötigen Sie Hilfe? Unser Support-Bot ist für Sie da.</p>
+
+        <button class="btn btn-sm btn-outline-primary"
+                id="evasive-button"
+                style="position: absolute; transition: all 0.2s ease; z-index: 10;"
+                type="button">
+            Support kontaktieren
+        </button>
+    </div>
+
+    <script>
+        const button = document.getElementById('evasive-button');
+        const container = button.parentElement;
+
+        const moveButton = () => {
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            const btnWidth = button.clientWidth;
+            const btnHeight = button.clientHeight;
+
+            const newX = Math.random() * (containerWidth - btnWidth);
+            const newY = Math.random() * (containerHeight - btnHeight);
+
+            button.style.left = `${newX}px`;
+            button.style.top = `${newY}px`;
+        };
+        button.addEventListener('mouseover', moveButton);
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+    </script>
+</main>
+
+<footer class="container mt-5 py-3 border-top text-center text-muted">
+    <small>&copy; 2026 Game of Advisors - Programmierpraktikum</small>
+</footer>
+
+</body>
+</html>

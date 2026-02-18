@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserAccountRepositoryPort {
-    UserAccount save(UserAccount account);
 
-    Optional<UserAccount> findById(Long githubId);
+	UserAccount save(UserAccount account);
 
-    List<UserAccount> findAll();
+	Optional<UserAccount> findById(Long githubId);
+
+	List<UserAccount> findAll();
+
 }

@@ -22,58 +22,63 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(SupervisorController.class)
-@Import({SecurityConfig.class, SupervisorRequestMapper.class, SupervisorResponseMapper.class})
+@Import({ SecurityConfig.class, SupervisorRequestMapper.class, SupervisorResponseMapper.class })
 class SupervisorControllerTest {
 
-    @Autowired
-    MockMvc mvc;
+	@Autowired
+	MockMvc mvc;
 
-    @MockitoBean
-    OAuthService oAuthService;
-    @MockitoBean
-    SupervisorCreateUseCase supervisorCreateUseCase;
-    @MockitoBean
-    SupervisorLoadUseCase supervisorLoadUseCase;
-    @MockitoBean
-    SupervisorUpdateUseCase supervisorUpdateUseCase;
-    @MockitoBean
-    SupervisorDeleteUseCase supervisorDeleteUseCase;
-    @MockitoBean
-    FieldAddUseCase fieldAddUseCase;
-    @MockitoBean
-    LoadByUserIdUseCase loadByUserIdUseCase;
-    @MockitoBean
-    SupervisorShowAllUseCase supervisorShowAllUseCase;
-    @MockitoBean
-    TopicShowListUseCase topicShowListUseCase;
+	@MockitoBean
+	OAuthService oAuthService;
 
-    @Test
-    @WithMockUser(roles = "USER")
-    @DisplayName("Das Registrierungsformular ist für User erreichbar")
-    void should_display_register_form() throws Exception {
-        mvc.perform(get("/supervisor/register"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("supervisor/supervisor-register"));
-    }
+	@MockitoBean
+	SupervisorCreateUseCase supervisorCreateUseCase;
 
-    @Test
-    @WithMockUser(roles = "SUPERVISOR")
-    @DisplayName("Profilseite ist für Supervisor erreichbar")
-    void should_display_profile_for_supervisor() throws Exception {
-        mvc.perform(get("/supervisor/profile"))
-                .andExpect(status().isOk());
-    }
+	@MockitoBean
+	SupervisorLoadUseCase supervisorLoadUseCase;
 
-    @Test
-    @WithMockUser(roles = "USER")
-    @DisplayName("Registrierung scheitert bei ungültigen Eingaben")
-    void should_fail_registration_when_validation_fails() throws Exception {
-        mvc.perform(post("/supervisor/register")
-                        .with(csrf())
-                        .param("academicTitle", "")
-                        .param("firstName", "")
-                        .param("lastName", ""))
-                .andExpect(status().isOk())
-                .andExpect(view().name("supervisor/supervisor-register"));
-    }
+	@MockitoBean
+	SupervisorUpdateUseCase supervisorUpdateUseCase;
+
+	@MockitoBean
+	SupervisorDeleteUseCase supervisorDeleteUseCase;
+
+	@MockitoBean
+	FieldAddUseCase fieldAddUseCase;
+
+	@MockitoBean
+	LoadByUserIdUseCase loadByUserIdUseCase;
+
+	@MockitoBean
+	SupervisorShowAllUseCase supervisorShowAllUseCase;
+
+	@MockitoBean
+	TopicShowListUseCase topicShowListUseCase;
+
+	@Test
+	@WithMockUser(roles = "USER")
+	@DisplayName("Das Registrierungsformular ist für User erreichbar")
+	void should_display_register_form() throws Exception {
+		mvc.perform(get("/supervisor/register"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("supervisor/supervisor-register"));
+	}
+
+	@Test
+	@WithMockUser(roles = "SUPERVISOR")
+	@DisplayName("Profilseite ist für Supervisor erreichbar")
+	void should_display_profile_for_supervisor() throws Exception {
+		mvc.perform(get("/supervisor/profile")).andExpect(status().isOk());
+	}
+
+	@Test
+	@WithMockUser(roles = "USER")
+	@DisplayName("Registrierung scheitert bei ungültigen Eingaben")
+	void should_fail_registration_when_validation_fails() throws Exception {
+		mvc.perform(post("/supervisor/register").with(csrf())
+			.param("academicTitle", "")
+			.param("firstName", "")
+			.param("lastName", "")).andExpect(status().isOk()).andExpect(view().name("supervisor/supervisor-register"));
+	}
+
 }

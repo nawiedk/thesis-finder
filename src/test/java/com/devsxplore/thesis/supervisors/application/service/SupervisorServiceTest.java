@@ -22,92 +22,88 @@ import static org.mockito.Mockito.*;
 
 class SupervisorServiceTest {
 
-    private final SupervisorRepositoryPort repositoryPort = mock(SupervisorRepositoryPort.class);
-    private final SupervisorService service = new SupervisorService(repositoryPort, null);
+	private final SupervisorRepositoryPort repositoryPort = mock(SupervisorRepositoryPort.class);
 
-    @Test
-    @DisplayName("loadTopicsBySupervisor gibt alle Themen zurück")
-    void should_return_all_topics_when_supervisor_exists() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        for (Topic topic : createBatFamily()) {
-            supervisor.addTopic(topic.getTitle(), topic.getDescription());
-        }
-        when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
-        ShowTopicListCommand command = new ShowTopicListCommand(1L);
+	private final SupervisorService service = new SupervisorService(repositoryPort, null);
 
-        List<Topic> topics = service.loadTopicsBySupervisor(command);
+	@Test
+	@DisplayName("loadTopicsBySupervisor gibt alle Themen zurück")
+	void should_return_all_topics_when_supervisor_exists() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		for (Topic topic : createBatFamily()) {
+			supervisor.addTopic(topic.getTitle(), topic.getDescription());
+		}
+		when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
+		ShowTopicListCommand command = new ShowTopicListCommand(1L);
 
-        assertThat(topics).hasSize(4);
-    }
+		List<Topic> topics = service.loadTopicsBySupervisor(command);
 
-    @Test
-    @DisplayName("updateTopic aktualisiert Titel und Beschreibung")
-    void should_update_topic_title_and_description() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        Topic topicWithId = Topic.createTopicWithId(new TopicId(100L), "Alter Titel", "Alte Desc");
-        supervisor.addExistingTopic(topicWithId);
-        when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
-        TopicUpdateCommand command = new TopicUpdateCommand(1L, 100L, "Neuer Titel", "Neue Beschreibung");
-        Topic updatedTopic = service.updateTopic(command);
-        assertThat(updatedTopic.getTitle()).isEqualTo("Neuer Titel");
-        verify(repositoryPort).save(supervisor);
-    }
+		assertThat(topics).hasSize(4);
+	}
 
-    @Test
-    @DisplayName("createTopic speichert das Topic im Supervisor")
-    void should_add_topic_to_supervisor_list() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
-        when(repositoryPort.save(any(Supervisor.class))).thenAnswer(i -> i.getArgument(0));
-        CreateTopicCommand command = new CreateTopicCommand(1L, "Bruce Wayne", "Batman");
+	@Test
+	@DisplayName("updateTopic aktualisiert Titel und Beschreibung")
+	void should_update_topic_title_and_description() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		Topic topicWithId = Topic.createTopicWithId(new TopicId(100L), "Alter Titel", "Alte Desc");
+		supervisor.addExistingTopic(topicWithId);
+		when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
+		TopicUpdateCommand command = new TopicUpdateCommand(1L, 100L, "Neuer Titel", "Neue Beschreibung");
+		Topic updatedTopic = service.updateTopic(command);
+		assertThat(updatedTopic.getTitle()).isEqualTo("Neuer Titel");
+		verify(repositoryPort).save(supervisor);
+	}
 
-        Topic topic = service.createTopic(command);
+	@Test
+	@DisplayName("createTopic speichert das Topic im Supervisor")
+	void should_add_topic_to_supervisor_list() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		when(repositoryPort.load(1L)).thenReturn(Optional.of(supervisor));
+		when(repositoryPort.save(any(Supervisor.class))).thenAnswer(i -> i.getArgument(0));
+		CreateTopicCommand command = new CreateTopicCommand(1L, "Bruce Wayne", "Batman");
 
-        assertThat(topic.getTitle()).isEqualTo("Bruce Wayne");
-        assertThat(supervisor.getTopics())
-                .extracting(Topic::getTitle)
-                .contains("Bruce Wayne");
-        verify(repositoryPort).save(supervisor);
-    }
+		Topic topic = service.createTopic(command);
 
-    @Test
-    void createSupervisor_ShouldThrowException_WhenUserAlreadyExists() {
-        Long userId = 1L;
-        SupervisorCreateCommand command = new SupervisorCreateCommand(
-                userId,
-                new Name("John", "Doe", null),
-                Contact.contactFromPrimitive("john@hhu.de", "Room 1", "123")
-        );
+		assertThat(topic.getTitle()).isEqualTo("Bruce Wayne");
+		assertThat(supervisor.getTopics()).extracting(Topic::getTitle).contains("Bruce Wayne");
+		verify(repositoryPort).save(supervisor);
+	}
 
-        when(repositoryPort.existsBySupervisorUserId(userId)).thenReturn(true);
+	@Test
+	void createSupervisor_ShouldThrowException_WhenUserAlreadyExists() {
+		Long userId = 1L;
+		SupervisorCreateCommand command = new SupervisorCreateCommand(userId, new Name("John", "Doe", null),
+				Contact.contactFromPrimitive("john@hhu.de", "Room 1", "123"));
 
-        assertThatThrownBy(() -> service.createSupervisor(command))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Du bist bereits registriert");
-    }
+		when(repositoryPort.existsBySupervisorUserId(userId)).thenReturn(true);
 
-    @Test
-    void deleteTopic_should_return_false_if_topic_not_found_in_list() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        supervisor.addTopic("Titel", "Desc");
+		assertThatThrownBy(() -> service.createSupervisor(command)).isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Du bist bereits registriert");
+	}
 
-        when(repositoryPort.loadAll()).thenReturn(List.of(supervisor));
+	@Test
+	void deleteTopic_should_return_false_if_topic_not_found_in_list() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		supervisor.addTopic("Titel", "Desc");
 
-        assertThatThrownBy(() -> service.deleteTopic(new TopicDeleteCommand(999L)))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Topic not found");
-    }
+		when(repositoryPort.loadAll()).thenReturn(List.of(supervisor));
 
-    @Test
-    void updateTopic_should_not_change_values_if_null_passed() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        Topic topic = supervisor.addTopic("Original", "Original Desc");
+		assertThatThrownBy(() -> service.deleteTopic(new TopicDeleteCommand(999L)))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Topic not found");
+	}
 
-        when(repositoryPort.load(anyLong())).thenReturn(Optional.of(supervisor));
+	@Test
+	void updateTopic_should_not_change_values_if_null_passed() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		Topic topic = supervisor.addTopic("Original", "Original Desc");
 
-        topic.updateTopic(null, null);
+		when(repositoryPort.load(anyLong())).thenReturn(Optional.of(supervisor));
 
-        assertThat(topic.getTitle()).isEqualTo("Original");
-        assertThat(topic.getDescription()).isEqualTo("Original Desc");
-    }
+		topic.updateTopic(null, null);
+
+		assertThat(topic.getTitle()).isEqualTo("Original");
+		assertThat(topic.getDescription()).isEqualTo("Original Desc");
+	}
+
 }

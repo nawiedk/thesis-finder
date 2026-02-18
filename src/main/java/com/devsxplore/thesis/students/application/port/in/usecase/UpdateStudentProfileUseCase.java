@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.UpdateStudentP
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface UpdateStudentProfileUseCase {
-    Student updateProfile(UpdateStudentProfileCommand command);
+
+	Student updateProfile(UpdateStudentProfileCommand command);
+
 }

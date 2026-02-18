@@ -8,15 +8,16 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ThesisApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ThesisApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(ThesisApplication.class, args);
+	}
 
-    @Bean
-    public FlywayMigrationStrategy cleanMigrationStrategy() {
-        return flyway -> {
-            flyway.clean();
-            flyway.migrate();
-        };
-    }
+	@Bean
+	public FlywayMigrationStrategy cleanMigrationStrategy() {
+		return flyway -> {
+			flyway.clean();
+			flyway.migrate();
+		};
+	}
+
 }

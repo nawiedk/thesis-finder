@@ -15,28 +15,25 @@ import static com.devsxplore.thesis.accounts.adapter.out.persistence.UserAccount
 @RequiredArgsConstructor
 public class UserAccountPersistenceAdapter implements UserAccountRepositoryPort {
 
-    private final UserAccountRepository repository;
+	private final UserAccountRepository repository;
 
-    @Override
-    public UserAccount save(UserAccount account) {
-        UserAccountJDBCEntity entity = mapUserAccountToJDBCEntity(account);
-        if (entity.getId() != null && repository.existsById(entity.getId()))
-            entity.markNotNew();
-        UserAccountJDBCEntity saved = repository.save(entity);
-        return mapUserAccountToDomainEntity(saved);
-    }
+	@Override
+	public UserAccount save(UserAccount account) {
+		UserAccountJDBCEntity entity = mapUserAccountToJDBCEntity(account);
+		if (entity.getId() != null && repository.existsById(entity.getId()))
+			entity.markNotNew();
+		UserAccountJDBCEntity saved = repository.save(entity);
+		return mapUserAccountToDomainEntity(saved);
+	}
 
-    @Override
-    public Optional<UserAccount> findById(Long githubId) {
-        return repository.findById(githubId)
-                .map(UserAccountMapper::mapUserAccountToDomainEntity);
-    }
+	@Override
+	public Optional<UserAccount> findById(Long githubId) {
+		return repository.findById(githubId).map(UserAccountMapper::mapUserAccountToDomainEntity);
+	}
 
-    @Override
-    public List<UserAccount> findAll() {
-        return repository.findAll()
-                .stream()
-                .map(UserAccountMapper::mapUserAccountToDomainEntity)
-                .toList();
-    }
+	@Override
+	public List<UserAccount> findAll() {
+		return repository.findAll().stream().map(UserAccountMapper::mapUserAccountToDomainEntity).toList();
+	}
+
 }

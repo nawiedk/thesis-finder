@@ -8,19 +8,8 @@ import java.util.Set;
 import java.util.UUID;
 
 @Table("SUPERVISOR")
-public record SupervisorJDBCEntity(
-        @Id Long supervisorId,
-        Long userId,
-        UUID publicId,
-        String title,
-        String firstName,
-        String lastName,
-        String email,
-        String office,
-        String phone,
-        @MappedCollection(idColumn = "SUPERVISOR_ID")
-        Set<FieldTagJDBCEntity> fields,
-        @MappedCollection(idColumn = "SUPERVISOR_ID")
-        Set<TopicJDBCEntity> topics
-) {
+public record SupervisorJDBCEntity(@Id Long supervisorId, Long userId, UUID publicId, String title, String firstName,
+		String lastName, String email, String office, String phone,
+		@MappedCollection(idColumn = "SUPERVISOR_ID") Set<FieldTagJDBCEntity> fields,
+		@MappedCollection(idColumn = "SUPERVISOR_ID") Set<TopicJDBCEntity> topics) {
 }

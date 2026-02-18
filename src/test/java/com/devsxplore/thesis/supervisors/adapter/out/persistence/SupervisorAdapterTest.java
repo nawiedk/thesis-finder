@@ -21,55 +21,56 @@ import static com.devsxplore.thesis.supervisors.domain.model.SupervisorFactory.c
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJdbcTest
-@Import({SupervisorPersistenceAdapter.class, SupervisorMapper.class, TopicMapper.class, FieldTagMapper.class})
+@Import({ SupervisorPersistenceAdapter.class, SupervisorMapper.class, TopicMapper.class, FieldTagMapper.class })
 class SupervisorAdapterTest {
 
-    @Autowired
-    SupervisorPersistenceAdapter adapter;
+	@Autowired
+	SupervisorPersistenceAdapter adapter;
 
-    @Autowired
-    SupervisorRepository repository;
+	@Autowired
+	SupervisorRepository repository;
 
-    @Test
-    @DisplayName("Supervisor kann gespeichert und geladen werden")
-    void should_save_and_load_supervisor() {
-        Supervisor supervisor = createSupervisorWithTopics();
+	@Test
+	@DisplayName("Supervisor kann gespeichert und geladen werden")
+	void should_save_and_load_supervisor() {
+		Supervisor supervisor = createSupervisorWithTopics();
 
-        Supervisor saved = adapter.save(supervisor);
-        Optional<Supervisor> loaded = adapter.load(saved.getSupervisorId());
+		Supervisor saved = adapter.save(supervisor);
+		Optional<Supervisor> loaded = adapter.load(saved.getSupervisorId());
 
-        assertThat(loaded).isPresent();
-        assertThat(loaded.get().getFirstName()).isEqualTo(supervisor.getFirstName());
-        assertThat(loaded.get().getTopics()).isNotEmpty();
-    }
+		assertThat(loaded).isPresent();
+		assertThat(loaded.get().getFirstName()).isEqualTo(supervisor.getFirstName());
+		assertThat(loaded.get().getTopics()).isNotEmpty();
+	}
 
-    @Test
-    void updateProfile_ShouldKeepOldValues_WhenNewValuesAreBlank() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
-        String oldFirstName = supervisor.getFirstName();
+	@Test
+	void updateProfile_ShouldKeepOldValues_WhenNewValuesAreBlank() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
+		String oldFirstName = supervisor.getFirstName();
 
-        supervisor.updateProfile("", "  ", null, "valid@hhu.de", "", null);
+		supervisor.updateProfile("", "  ", null, "valid@hhu.de", "", null);
 
-        assertThat(supervisor.getFirstName()).isEqualTo(oldFirstName);
-    }
+		assertThat(supervisor.getFirstName()).isEqualTo(oldFirstName);
+	}
 
-    @Test
-    void getFullName_ShouldIncludeTitle_OnlyIfPresent() {
-        Name nameWithTitle = new Name("Max", "Mustermann", AcademicTitle.DR);
-        Name nameWithoutTitle = new Name("Max", "Mustermann", AcademicTitle.NONE);
+	@Test
+	void getFullName_ShouldIncludeTitle_OnlyIfPresent() {
+		Name nameWithTitle = new Name("Max", "Mustermann", AcademicTitle.DR);
+		Name nameWithoutTitle = new Name("Max", "Mustermann", AcademicTitle.NONE);
 
-        assertThat(nameWithTitle.getFullName()).isEqualTo("Dr. Max Mustermann");
-        assertThat(nameWithoutTitle.getFullName()).isEqualTo("Max Mustermann");
-    }
+		assertThat(nameWithTitle.getFullName()).isEqualTo("Dr. Max Mustermann");
+		assertThat(nameWithoutTitle.getFullName()).isEqualTo("Max Mustermann");
+	}
 
-    @Test
-    void addField_ShouldNotAddDuplicateFields() {
-        Supervisor supervisor = createSupervisorWithNoTopics();
+	@Test
+	void addField_ShouldNotAddDuplicateFields() {
+		Supervisor supervisor = createSupervisorWithNoTopics();
 
-        supervisor.addField("Java");
-        supervisor.addField("java");
-        supervisor.addField(" Java ");
+		supervisor.addField("Java");
+		supervisor.addField("java");
+		supervisor.addField(" Java ");
 
-        assertThat(supervisor.getFields()).hasSize(1);
-    }
+		assertThat(supervisor.getFields()).hasSize(1);
+	}
+
 }

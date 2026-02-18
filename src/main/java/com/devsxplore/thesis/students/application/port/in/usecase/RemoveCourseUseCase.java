@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.ChangeCourseCo
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface RemoveCourseUseCase {
-    Student removeCourse(ChangeCourseCommand command);
+
+	Student removeCourse(ChangeCourseCommand command);
+
 }

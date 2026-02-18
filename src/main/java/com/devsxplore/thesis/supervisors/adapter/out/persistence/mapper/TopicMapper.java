@@ -11,35 +11,24 @@ import static com.devsxplore.thesis.supervisors.domain.model.Topic.createTopicWi
 
 public class TopicMapper {
 
-    public static Topic mapTopicToDomainEntity(TopicJDBCEntity entity) {
-        return createTopicWithId(
-                new TopicId(entity.topicId()),
-                entity.title(),
-                entity.description());
-    }
+	public static Topic mapTopicToDomainEntity(TopicJDBCEntity entity) {
+		return createTopicWithId(new TopicId(entity.topicId()), entity.title(), entity.description());
+	}
 
-    public static TopicJDBCEntity mapTopicToJDBCEntity(Topic entity) {
-        return new TopicJDBCEntity(
-                entity.getTopicId(),
-                entity.getTitle(),
-                entity.getDescription()
-        );
-    }
+	public static TopicJDBCEntity mapTopicToJDBCEntity(Topic entity) {
+		return new TopicJDBCEntity(entity.getTopicId(), entity.getTitle(), entity.getDescription());
+	}
 
-    public static Set<Topic> mapTopicsToDomainEntities(Set<TopicJDBCEntity> entities) {
-        if (entities == null)
-            return Set.of();
-        return entities.stream()
-                .map(TopicMapper::mapTopicToDomainEntity)
-                .collect(Collectors.toSet());
-    }
+	public static Set<Topic> mapTopicsToDomainEntities(Set<TopicJDBCEntity> entities) {
+		if (entities == null)
+			return Set.of();
+		return entities.stream().map(TopicMapper::mapTopicToDomainEntity).collect(Collectors.toSet());
+	}
 
-    public static Set<TopicJDBCEntity> mapTopicsToJDBCEntities(Set<Topic> entities) {
-        if (entities == null)
-            return Set.of();
-        return entities.stream()
-                .map(TopicMapper::mapTopicToJDBCEntity)
-                .collect(Collectors.toSet());
-    }
+	public static Set<TopicJDBCEntity> mapTopicsToJDBCEntities(Set<Topic> entities) {
+		if (entities == null)
+			return Set.of();
+		return entities.stream().map(TopicMapper::mapTopicToJDBCEntity).collect(Collectors.toSet());
+	}
 
 }

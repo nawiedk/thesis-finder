@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.RegisterStuden
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface RegisterStudentUseCase {
-    Student registerStudent(RegisterStudentCommand command);
+
+	Student registerStudent(RegisterStudentCommand command);
+
 }

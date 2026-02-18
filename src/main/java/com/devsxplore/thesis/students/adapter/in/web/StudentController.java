@@ -23,75 +23,71 @@ import org.springframework.web.bind.annotation.*;
 @PreAuthorize("hasRole('USER')")
 public class StudentController {
 
-    private final StudentRequestMapper requestMapper;
-    private final StudentResponseMapper responseMapper;
-    private final RegisterStudentUseCase registerStudentUseCase;
-    private final LoadStudentByUserIdUseCase loadStudentByUserIdUseCase;
-    private final UpdateStudentProfileUseCase updateStudentProfileUseCase;
-    private final AddCourseUseCase addCourseUseCase;
-    private final RemoveCourseUseCase removeCourseUseCase;
-    private final AddInterestUseCase addInterestUseCase;
-    private final RemoveInterestUseCase removeInterestUseCase;
+	private final StudentRequestMapper requestMapper;
 
-    @GetMapping("/register")
-    public String showRegisterStudentForm() {
-        return "student/registerStudentForm";
-    }
+	private final StudentResponseMapper responseMapper;
 
-    @PostMapping("/register")
-    public String registerStudent(@AuthenticationPrincipal CurrentUser user, @Valid RegisterStudentDTO dto) {
-        registerStudentUseCase.registerStudent(
-                requestMapper.mapToRegisterStudentCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final RegisterStudentUseCase registerStudentUseCase;
 
-    @GetMapping("/profile")
-    public String showProfile(@AuthenticationPrincipal CurrentUser user, Model model) {
-        Student student = loadStudentByUserIdUseCase.loadStudentByStudentUserId(
-                requestMapper.mapToLoadStudentByUserIdCommand(user.githubId())
-        );
-        model.addAttribute("student", responseMapper.mapToUserProfileDTO(student));
-        return "student/showProfile";
-    }
+	private final LoadStudentByUserIdUseCase loadStudentByUserIdUseCase;
 
-    @PutMapping("/profile/update")
-    public String editProfile(@AuthenticationPrincipal CurrentUser user, @Valid UpdateStudentProfileDTO dto) {
-        updateStudentProfileUseCase.updateProfile(
-                requestMapper.mapToUpdateStudentProfileCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final UpdateStudentProfileUseCase updateStudentProfileUseCase;
 
-    @PostMapping("/course")
-    public String addCourse(@AuthenticationPrincipal CurrentUser user, @Valid ChangeCourseDTO dto) {
-        addCourseUseCase.addCourse(
-                requestMapper.mapToChangeCourseCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final AddCourseUseCase addCourseUseCase;
 
-    @DeleteMapping("/course")
-    public String removeCourse(@AuthenticationPrincipal CurrentUser user, @Valid ChangeCourseDTO dto) {
-        removeCourseUseCase.removeCourse(
-                requestMapper.mapToChangeCourseCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final RemoveCourseUseCase removeCourseUseCase;
 
-    @PostMapping("/interest")
-    public String addInterest(@AuthenticationPrincipal CurrentUser user, @Valid ChangeInterestDTO dto) {
-        addInterestUseCase.addInterest(
-                requestMapper.mapToChangeInterestCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final AddInterestUseCase addInterestUseCase;
 
-    @DeleteMapping("/interest")
-    public String removeInterest(@AuthenticationPrincipal CurrentUser user, @Valid ChangeInterestDTO dto) {
-        removeInterestUseCase.removeInterest(
-                requestMapper.mapToChangeInterestCommand(user.githubId(), dto)
-        );
-        return "redirect:/student/profile";
-    }
+	private final RemoveInterestUseCase removeInterestUseCase;
+
+	@GetMapping("/register")
+	public String showRegisterStudentForm() {
+		return "student/registerStudentForm";
+	}
+
+	@PostMapping("/register")
+	public String registerStudent(@AuthenticationPrincipal CurrentUser user, @Valid RegisterStudentDTO dto) {
+		registerStudentUseCase.registerStudent(requestMapper.mapToRegisterStudentCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
+	@GetMapping("/profile")
+	public String showProfile(@AuthenticationPrincipal CurrentUser user, Model model) {
+		Student student = loadStudentByUserIdUseCase
+			.loadStudentByStudentUserId(requestMapper.mapToLoadStudentByUserIdCommand(user.githubId()));
+		model.addAttribute("student", responseMapper.mapToUserProfileDTO(student));
+		return "student/showProfile";
+	}
+
+	@PutMapping("/profile/update")
+	public String editProfile(@AuthenticationPrincipal CurrentUser user, @Valid UpdateStudentProfileDTO dto) {
+		updateStudentProfileUseCase.updateProfile(requestMapper.mapToUpdateStudentProfileCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
+	@PostMapping("/course")
+	public String addCourse(@AuthenticationPrincipal CurrentUser user, @Valid ChangeCourseDTO dto) {
+		addCourseUseCase.addCourse(requestMapper.mapToChangeCourseCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
+	@DeleteMapping("/course")
+	public String removeCourse(@AuthenticationPrincipal CurrentUser user, @Valid ChangeCourseDTO dto) {
+		removeCourseUseCase.removeCourse(requestMapper.mapToChangeCourseCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
+	@PostMapping("/interest")
+	public String addInterest(@AuthenticationPrincipal CurrentUser user, @Valid ChangeInterestDTO dto) {
+		addInterestUseCase.addInterest(requestMapper.mapToChangeInterestCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
+	@DeleteMapping("/interest")
+	public String removeInterest(@AuthenticationPrincipal CurrentUser user, @Valid ChangeInterestDTO dto) {
+		removeInterestUseCase.removeInterest(requestMapper.mapToChangeInterestCommand(user.githubId(), dto));
+		return "redirect:/student/profile";
+	}
+
 }

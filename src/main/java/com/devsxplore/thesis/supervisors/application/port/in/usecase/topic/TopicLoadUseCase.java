@@ -5,5 +5,7 @@ import com.devsxplore.thesis.supervisors.domain.model.Topic;
 import java.util.List;
 
 public interface TopicLoadUseCase {
-    List<Topic> loadAllTopics();
+
+	List<Topic> loadAllTopics();
+
 }

@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.ChangeCourseCo
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface AddCourseUseCase {
-    Student addCourse(ChangeCourseCommand command);
+
+	Student addCourse(ChangeCourseCommand command);
+
 }

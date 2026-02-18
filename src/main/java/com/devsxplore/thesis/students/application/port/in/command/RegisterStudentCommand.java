@@ -7,17 +7,12 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
 
-public record RegisterStudentCommand(
-        @NotNull @Positive(message = "User ID muss positiv sein")
-        Long studentUserId,
+public record RegisterStudentCommand(@NotNull @Positive(message = "User ID muss positiv sein") Long studentUserId,
 
-        @NotBlank @Size(min = 2)
-        String firstName,
+		@NotBlank @Size(min = 2) String firstName,
 
-        @NotBlank @Size(min = 2)
-        String lastName
-) {
-    public RegisterStudentCommand {
-        Objects.requireNonNull(studentUserId);
-    }
+		@NotBlank @Size(min = 2) String lastName) {
+	public RegisterStudentCommand {
+		Objects.requireNonNull(studentUserId);
+	}
 }

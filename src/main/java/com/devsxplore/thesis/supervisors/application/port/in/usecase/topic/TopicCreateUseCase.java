@@ -4,5 +4,7 @@ import com.devsxplore.thesis.supervisors.application.port.in.command.topic.Creat
 import com.devsxplore.thesis.supervisors.domain.model.Topic;
 
 public interface TopicCreateUseCase {
-    Topic createTopic(CreateTopicCommand command);
+
+	Topic createTopic(CreateTopicCommand command);
+
 }

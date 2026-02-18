@@ -4,5 +4,7 @@ import com.devsxplore.thesis.supervisors.application.port.in.command.topic.Topic
 import com.devsxplore.thesis.supervisors.domain.model.Topic;
 
 public interface TopicUpdateUseCase {
-    Topic updateTopic(TopicUpdateCommand command);
+
+	Topic updateTopic(TopicUpdateCommand command);
+
 }

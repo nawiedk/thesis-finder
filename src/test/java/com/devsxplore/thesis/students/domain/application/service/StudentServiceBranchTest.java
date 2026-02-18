@@ -15,28 +15,29 @@ import static org.mockito.Mockito.when;
 
 class StudentServiceBranchTest {
 
-    private final StudentRepositoryPort repository = mock(StudentRepositoryPort.class);
-    private final AssignUserRoleUseCase assignRoleUseCase = mock(AssignUserRoleUseCase.class);
-    private final StudentService service = new StudentService(repository, assignRoleUseCase);
+	private final StudentRepositoryPort repository = mock(StudentRepositoryPort.class);
 
-    @Test
-    void registerStudent_should_throw_exception_if_already_exists() {
-        Long userId = 1L;
-        RegisterStudentCommand command = new RegisterStudentCommand(userId, "Max", "Mustermann");
-        when(repository.existsByStudentUserId(userId)).thenReturn(true);
+	private final AssignUserRoleUseCase assignRoleUseCase = mock(AssignUserRoleUseCase.class);
 
-        assertThatThrownBy(() -> service.registerStudent(command))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Du bist bereits registriert!");
-    }
+	private final StudentService service = new StudentService(repository, assignRoleUseCase);
 
-    @Test
-    void addCourse_should_throw_exception_if_student_not_found() {
-        ChangeCourseCommand command = new ChangeCourseCommand(1L, "Java");
-        when(repository.loadByStudentUserId(1L)).thenReturn(Optional.empty());
+	@Test
+	void registerStudent_should_throw_exception_if_already_exists() {
+		Long userId = 1L;
+		RegisterStudentCommand command = new RegisterStudentCommand(userId, "Max", "Mustermann");
+		when(repository.existsByStudentUserId(userId)).thenReturn(true);
 
-        assertThatThrownBy(() -> service.addCourse(command))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Student not found");
-    }
+		assertThatThrownBy(() -> service.registerStudent(command)).isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Du bist bereits registriert!");
+	}
+
+	@Test
+	void addCourse_should_throw_exception_if_student_not_found() {
+		ChangeCourseCommand command = new ChangeCourseCommand(1L, "Java");
+		when(repository.loadByStudentUserId(1L)).thenReturn(Optional.empty());
+
+		assertThatThrownBy(() -> service.addCourse(command)).isInstanceOf(IllegalArgumentException.class)
+			.hasMessage("Student not found");
+	}
+
 }

@@ -1,32 +1,34 @@
 package com.devsxplore.thesis.supervisors.domain.model;
 
-
 //Tests entkoppeln
 public class TopicBuilder {
 
-    private Long id;
-    private String title;
-    private String description;
+	private Long id;
 
-    public TopicBuilder addId(Long id) {
-        this.id = id;
-        return this;
-    }
+	private String title;
 
-    public TopicBuilder addTitle(String title) {
-        this.title = title;
-        return this;
-    }
+	private String description;
 
-    public TopicBuilder addDescription(String description) {
-        this.description = description;
-        return this;
-    }
+	public TopicBuilder addId(Long id) {
+		this.id = id;
+		return this;
+	}
 
-    public Topic build() {
-        if (this.id == null) {
-            return Topic.createTopicWithoutId(title, description);
-        }
-        return Topic.createTopicWithId(new TopicId(id), title, description);
-    }
+	public TopicBuilder addTitle(String title) {
+		this.title = title;
+		return this;
+	}
+
+	public TopicBuilder addDescription(String description) {
+		this.description = description;
+		return this;
+	}
+
+	public Topic build() {
+		if (this.id == null) {
+			return Topic.createTopicWithoutId(title, description);
+		}
+		return Topic.createTopicWithId(new TopicId(id), title, description);
+	}
+
 }

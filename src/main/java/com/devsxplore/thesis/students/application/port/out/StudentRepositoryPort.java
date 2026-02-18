@@ -6,13 +6,12 @@ import java.util.Optional;
 
 public interface StudentRepositoryPort {
 
-    Student save(Student student);
+	Student save(Student student);
 
-    Optional<Student> load(Long studentId);
+	Optional<Student> load(Long studentId);
 
-    Optional<Student> loadByStudentUserId(Long studentUserId);
+	Optional<Student> loadByStudentUserId(Long studentUserId);
 
-    boolean existsByStudentUserId(Long studentUserId);
-
+	boolean existsByStudentUserId(Long studentUserId);
 
 }

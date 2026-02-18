@@ -5,11 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public record ChangeInterestCommand(
-        @NotNull @Positive(message = "User ID muss positiv sein")
-        Long studentUserId,
+public record ChangeInterestCommand(@NotNull @Positive(message = "User ID muss positiv sein") Long studentUserId,
 
-        @NotBlank @Size(max = 50)
-        String interest
-) {
+		@NotBlank @Size(max = 50) String interest) {
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 @Repository
 public interface UserAccountRepository extends CrudRepository<UserAccountJDBCEntity, Long> {
-    @Override
-    List<UserAccountJDBCEntity> findAll();
+
+	@Override
+	List<UserAccountJDBCEntity> findAll();
+
 }

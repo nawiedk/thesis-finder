@@ -13,23 +13,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final OAuthService oAuthService;
+	private final OAuthService oAuthService;
 
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity chainBuilder) {
-        return chainBuilder.authorizeHttpRequests(configurer -> configurer
-                        .requestMatchers("/", "/error", "/css/**", "/img/**", "/.well-known/**", "/js/**").permitAll()
-                        .requestMatchers("/supervisor/register", "/student/register").hasRole("USER")
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/supervisor/**").hasRole("SUPERVISOR")
-                        .requestMatchers("/topic/**").hasRole("SUPERVISOR")
-                        .requestMatchers("/student/**").hasRole("STUDENT")
-                        .anyRequest().authenticated()
-                )
-                .logout(l -> l.
-                        logoutSuccessUrl("/"))
-                .oauth2Login(oauth -> oauth
-                        .userInfoEndpoint(userInfo -> userInfo.userService(oAuthService)))
-                .build();
-    }
+	@Bean
+	public SecurityFilterChain configure(HttpSecurity chainBuilder) {
+		return chainBuilder
+				.authorizeHttpRequests(configurer -> configurer
+						.requestMatchers("/", "/error", "/css/**", "/img/**", "/.well-known/**", "/js/**")
+						.permitAll()
+//				.requestMatchers("/supervisor/register", "/student/register")
+//				.hasRole("USER")
+//				.requestMatchers("/admin/**")
+//				.hasRole("ADMIN")
+//				.requestMatchers("/supervisor/**")
+//				.hasRole("SUPERVISOR")
+//				.requestMatchers("/topic/**")
+//				.hasRole("SUPERVISOR")
+//				.requestMatchers("/student/**")
+//				.hasRole("STUDENT")
+						.anyRequest()
+						.authenticated())
+				.logout(l -> l.logoutSuccessUrl("/"))
+				.oauth2Login(oauth -> oauth.userInfoEndpoint(userInfo -> userInfo.userService(oAuthService)))
+				.build();
+	}
+
 }

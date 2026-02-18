@@ -15,45 +15,30 @@ import static com.devsxplore.thesis.supervisors.domain.model.Supervisor.createSu
 @Component
 public class SupervisorMapper {
 
-    public Supervisor mapSupervisorToDomainEntity(SupervisorJDBCEntity entity) {
-        Name name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
-        Contact contactDetails = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
+	public Supervisor mapSupervisorToDomainEntity(SupervisorJDBCEntity entity) {
+		Name name = nameFromPrimitive(entity.firstName(), entity.lastName(), entity.title());
+		Contact contactDetails = contactFromPrimitive(entity.email(), entity.office(), entity.phone());
 
-        Supervisor supervisor = createSupervisorWithId(
-                new SupervisorId(entity.supervisorId()),
-                new UserId(entity.userId()),
-                new PublicId(entity.publicId()),
-                name,
-                contactDetails
-        );
+		Supervisor supervisor = createSupervisorWithId(new SupervisorId(entity.supervisorId()),
+				new UserId(entity.userId()), new PublicId(entity.publicId()), name, contactDetails);
 
-        if (entity.fields() != null) {
-            mapFieldTagsToDomainEntities(entity.fields())
-                    .forEach(supervisor::addExistingFields);
-        }
+		if (entity.fields() != null) {
+			mapFieldTagsToDomainEntities(entity.fields()).forEach(supervisor::addExistingFields);
+		}
 
-        if (entity.topics() != null) {
-            mapTopicsToDomainEntities(entity.topics())
-                    .forEach(supervisor::addExistingTopic);
-        }
+		if (entity.topics() != null) {
+			mapTopicsToDomainEntities(entity.topics()).forEach(supervisor::addExistingTopic);
+		}
 
-        return supervisor;
-    }
+		return supervisor;
+	}
 
-    public SupervisorJDBCEntity mapSupervisorToJDBCEntity(Supervisor entity) {
-        return new SupervisorJDBCEntity(
-                entity.getSupervisorId(),
-                entity.getUserID(),
-                entity.getPublicId(),
-                entity.getAcademicTitle(),
-                entity.getFirstName(),
-                entity.getLastName(),
-                entity.getEmailAsString(),
-                entity.getOffice(),
-                entity.getPhone(),
-                mapFieldTagsToJDBCEntities(entity.getFields()),
-                mapTopicsToJDBCEntities(entity.getTopics())
-        );
+	public SupervisorJDBCEntity mapSupervisorToJDBCEntity(Supervisor entity) {
+		return new SupervisorJDBCEntity(entity.getSupervisorId(), entity.getUserID(), entity.getPublicId(),
+				entity.getAcademicTitle(), entity.getFirstName(), entity.getLastName(), entity.getEmailAsString(),
+				entity.getOffice(), entity.getPhone(), mapFieldTagsToJDBCEntities(entity.getFields()),
+				mapTopicsToJDBCEntities(entity.getTopics()));
 
-    }
+	}
+
 }

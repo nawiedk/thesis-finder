@@ -9,148 +9,152 @@ import static com.devsxplore.thesis.supervisors.domain.model.Topic.createTopicWi
 @SuppressWarnings("LombokGetterMayBeUsed")
 public class Supervisor {
 
-    private final SupervisorId supervisorId;
-    private final UserId userId;
-    private final PublicId publicId;
-    private final Set<FieldTag> fields;
-    private final Set<Topic> topics;
-    private Name name;
-    private Contact contactDetails;
+	private final SupervisorId supervisorId;
 
-    private Supervisor(SupervisorId supervisorId, UserId userId, PublicId publicId, Name name, Contact contactDetails) {
-        this.supervisorId = Objects.requireNonNull(supervisorId, "Supervisor ID cannot be null");
-        this.userId = Objects.requireNonNull(userId, "UserID cannot be null");
-        this.publicId = Objects.requireNonNull(publicId, "Public ID cannot be null");
-        this.name = Objects.requireNonNull(name, "Name cannot be null");
-        this.contactDetails = Objects.requireNonNull(contactDetails, "Contact details cannot be null");
-        fields = new HashSet<>();
-        topics = new HashSet<>();
-    }
+	private final UserId userId;
 
-    public static Supervisor createSupervisorWithoutId(UserId userId, Name name, Contact contactDetails) {
-        return new Supervisor(SupervisorId.unassigned(), userId, PublicId.generate(), name, contactDetails);
-    }
+	private final PublicId publicId;
 
-    public static Supervisor createSupervisorWithId(SupervisorId id, UserId userId, PublicId publicId, Name name, Contact contactDetails) {
-        return new Supervisor(id, userId, publicId, name, contactDetails);
-    }
+	private final Set<FieldTag> fields;
 
-    public UUID getPublicId() {
-        return publicId.uuid();
-    }
+	private final Set<Topic> topics;
 
-    public Long getSupervisorId() {
-        return supervisorId.supervisorId();
-    }
+	private Name name;
 
-    public Long getUserID() {
-        return userId.userId();
-    }
+	private Contact contactDetails;
 
-    public String getFullName() {
-        return name.getFullName();
-    }
+	private Supervisor(SupervisorId supervisorId, UserId userId, PublicId publicId, Name name, Contact contactDetails) {
+		this.supervisorId = Objects.requireNonNull(supervisorId, "Supervisor ID cannot be null");
+		this.userId = Objects.requireNonNull(userId, "UserID cannot be null");
+		this.publicId = Objects.requireNonNull(publicId, "Public ID cannot be null");
+		this.name = Objects.requireNonNull(name, "Name cannot be null");
+		this.contactDetails = Objects.requireNonNull(contactDetails, "Contact details cannot be null");
+		fields = new HashSet<>();
+		topics = new HashSet<>();
+	}
 
-    public String getFirstName() {
-        return name.firstName();
-    }
+	public static Supervisor createSupervisorWithoutId(UserId userId, Name name, Contact contactDetails) {
+		return new Supervisor(SupervisorId.unassigned(), userId, PublicId.generate(), name, contactDetails);
+	}
 
-    public String getLastName() {
-        return name.lastName();
-    }
+	public static Supervisor createSupervisorWithId(SupervisorId id, UserId userId, PublicId publicId, Name name,
+			Contact contactDetails) {
+		return new Supervisor(id, userId, publicId, name, contactDetails);
+	}
 
-    public AcademicTitle getTitle() {
-        return name.title();
-    }
+	public UUID getPublicId() {
+		return publicId.uuid();
+	}
 
-    public String getAcademicTitle() {
-        return name.title().getAbbreviation();
-    }
+	public Long getSupervisorId() {
+		return supervisorId.supervisorId();
+	}
 
-    public String getEmailAsString() {
-        return contactDetails.email().email();
-    }
+	public Long getUserID() {
+		return userId.userId();
+	}
 
-    public String getPhone() {
-        return contactDetails.phone();
-    }
+	public String getFullName() {
+		return name.getFullName();
+	}
 
-    public String getOffice() {
-        return contactDetails.office();
-    }
+	public String getFirstName() {
+		return name.firstName();
+	}
 
-    public void updateProfile(String firstName, String lastName, String title,
-                              String email, String office, String phone) {
-        this.name = nameFromPrimitive(
-                (firstName == null || firstName.isBlank()) ? name.firstName() : firstName,
-                (lastName == null || lastName.isBlank()) ? name.lastName() : lastName,
-                (title == null || title.isBlank()) ? name.title().getAbbreviation() : title
-        );
-        this.contactDetails = contactFromPrimitive(
-                (email == null || email.isBlank()) ? contactDetails.email().email() : email,
-                (office == null || office.isBlank()) ? contactDetails.office() : office,
-                (phone == null || phone.isBlank()) ? contactDetails.phone() : phone
-        );
-    }
+	public String getLastName() {
+		return name.lastName();
+	}
 
-    public Set<FieldTag> getFields() {
-        return Set.copyOf(fields);
-    }
+	public AcademicTitle getTitle() {
+		return name.title();
+	}
 
-    public Set<Topic> getTopics() {
-        return Set.copyOf(topics);
-    }
+	public String getAcademicTitle() {
+		return name.title().getAbbreviation();
+	}
 
-    private boolean containsField(String fieldName) {
-        if (fields.isEmpty()) return false;
-        return fields.stream()
-                .anyMatch(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
-    }
+	public String getEmailAsString() {
+		return contactDetails.email().email();
+	}
 
-    public void addField(String fieldName) {
-        if (fieldName != null && !fieldName.isBlank() && !containsField(fieldName))
-            fields.add(new FieldTag(fieldName));
-    }
+	public String getPhone() {
+		return contactDetails.phone();
+	}
 
-    public void addFields(Set<String> fieldNames) {
-        if (fieldNames != null)
-            for (String fieldName : fieldNames)
-                this.addField(fieldName);
-    }
+	public String getOffice() {
+		return contactDetails.office();
+	}
 
-    public boolean removeField(String fieldName) {
-        if (fieldName == null || fieldName.isBlank())
-            return false;
-        return fields.removeIf(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
-    }
+	public void updateProfile(String firstName, String lastName, String title, String email, String office,
+			String phone) {
+		this.name = nameFromPrimitive((firstName == null || firstName.isBlank()) ? name.firstName() : firstName,
+				(lastName == null || lastName.isBlank()) ? name.lastName() : lastName,
+				(title == null || title.isBlank()) ? name.title().getAbbreviation() : title);
+		this.contactDetails = contactFromPrimitive(
+				(email == null || email.isBlank()) ? contactDetails.email().email() : email,
+				(office == null || office.isBlank()) ? contactDetails.office() : office,
+				(phone == null || phone.isBlank()) ? contactDetails.phone() : phone);
+	}
 
-    public void addExistingFields(FieldTag field) {
-        this.fields.add(field);
-    }
+	public Set<FieldTag> getFields() {
+		return Set.copyOf(fields);
+	}
 
-    public Topic addTopic(String title, String description) {
-        Topic topic = createTopicWithoutId(title, description);
-        topics.add(topic);
-        return topic;
-    }
+	public Set<Topic> getTopics() {
+		return Set.copyOf(topics);
+	}
 
-    public Topic updateTopic(Long topicId, String newTitle, String newDescription) {
-        Topic topic = findTopicByTopicId(topicId)
-                .orElseThrow(() -> new IllegalArgumentException("Topic not found"));
-        return topic.updateTopic(newTitle, newDescription);
-    }
+	private boolean containsField(String fieldName) {
+		if (fields.isEmpty())
+			return false;
+		return fields.stream().anyMatch(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
+	}
 
-    public boolean removeTopic(Long topicId) {
-        return topics.removeIf(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId));
-    }
+	public void addField(String fieldName) {
+		if (fieldName != null && !fieldName.isBlank() && !containsField(fieldName))
+			fields.add(new FieldTag(fieldName));
+	}
 
-    private Optional<Topic> findTopicByTopicId(Long topicId) {
-        return topics.stream()
-                .filter(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId))
-                .findFirst();
-    }
+	public void addFields(Set<String> fieldNames) {
+		if (fieldNames != null)
+			for (String fieldName : fieldNames)
+				this.addField(fieldName);
+	}
 
-    public void addExistingTopic(Topic topic) {
-        topics.add(topic);
-    }
+	public boolean removeField(String fieldName) {
+		if (fieldName == null || fieldName.isBlank())
+			return false;
+		return fields.removeIf(field -> field.fieldName().trim().equalsIgnoreCase(fieldName.trim()));
+	}
+
+	public void addExistingFields(FieldTag field) {
+		this.fields.add(field);
+	}
+
+	public Topic addTopic(String title, String description) {
+		Topic topic = createTopicWithoutId(title, description);
+		topics.add(topic);
+		return topic;
+	}
+
+	public Topic updateTopic(Long topicId, String newTitle, String newDescription) {
+		Topic topic = findTopicByTopicId(topicId).orElseThrow(() -> new IllegalArgumentException("Topic not found"));
+		return topic.updateTopic(newTitle, newDescription);
+	}
+
+	public boolean removeTopic(Long topicId) {
+		return topics.removeIf(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId));
+	}
+
+	private Optional<Topic> findTopicByTopicId(Long topicId) {
+		return topics.stream()
+			.filter(topic -> topic.getTopicId() != null && topic.getTopicId().equals(topicId))
+			.findFirst();
+	}
+
+	public void addExistingTopic(Topic topic) {
+		topics.add(topic);
+	}
+
 }

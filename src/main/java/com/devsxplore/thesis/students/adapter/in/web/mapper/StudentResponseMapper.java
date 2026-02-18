@@ -13,27 +13,17 @@ import java.util.stream.Collectors;
 @Component
 public class StudentResponseMapper {
 
-    public UserProfileDTO mapToUserProfileDTO(Student student) {
-        Set<String> courses = new HashSet<>();
-        Set<String> interests = new HashSet<>();
+	public UserProfileDTO mapToUserProfileDTO(Student student) {
+		Set<String> courses = new HashSet<>();
+		Set<String> interests = new HashSet<>();
 
-        if (!student.getCourses().isEmpty())
-            courses = student.getCourses()
-                    .stream()
-                    .map(Course::course)
-                    .collect(Collectors.toSet());
-        if (!student.getInterests().isEmpty())
-            interests = student.getInterests()
-                    .stream()
-                    .map(Interest::interest)
-                    .collect(Collectors.toSet());
+		if (!student.getCourses().isEmpty())
+			courses = student.getCourses().stream().map(Course::course).collect(Collectors.toSet());
+		if (!student.getInterests().isEmpty())
+			interests = student.getInterests().stream().map(Interest::interest).collect(Collectors.toSet());
 
-        return new UserProfileDTO(
-                student.getFirstName(),
-                student.getLastName(),
-                student.getFullName(),
-                courses,
-                interests
-        );
-    }
+		return new UserProfileDTO(student.getFirstName(), student.getLastName(), student.getFullName(), courses,
+				interests);
+	}
+
 }

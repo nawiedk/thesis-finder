@@ -10,23 +10,20 @@ import java.util.stream.Collectors;
 @Component
 public class CourseMapper {
 
-    public Course mapCourseToDomainEntity(CourseJDBCEntity entity) {
-        return new Course(entity.course());
-    }
+	public Course mapCourseToDomainEntity(CourseJDBCEntity entity) {
+		return new Course(entity.course());
+	}
 
-    public CourseJDBCEntity mapCourseToJDBCEntity(Course course) {
-        return new CourseJDBCEntity(course.course());
-    }
+	public CourseJDBCEntity mapCourseToJDBCEntity(Course course) {
+		return new CourseJDBCEntity(course.course());
+	}
 
-    public Set<Course> mapCoursesToDomainEntities(Set<CourseJDBCEntity> entities) {
-        return entities.stream()
-                .map(this::mapCourseToDomainEntity)
-                .collect(Collectors.toSet());
-    }
+	public Set<Course> mapCoursesToDomainEntities(Set<CourseJDBCEntity> entities) {
+		return entities.stream().map(this::mapCourseToDomainEntity).collect(Collectors.toSet());
+	}
 
-    public Set<CourseJDBCEntity> mapCoursesToJDBCEntities(Set<Course> courses) {
-        return courses.stream()
-                .map(this::mapCourseToJDBCEntity)
-                .collect(Collectors.toSet());
-    }
+	public Set<CourseJDBCEntity> mapCoursesToJDBCEntities(Set<Course> courses) {
+		return courses.stream().map(this::mapCourseToJDBCEntity).collect(Collectors.toSet());
+	}
+
 }

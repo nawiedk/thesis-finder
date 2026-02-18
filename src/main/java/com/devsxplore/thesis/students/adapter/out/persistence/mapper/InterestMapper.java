@@ -10,23 +10,20 @@ import java.util.stream.Collectors;
 @Component
 public class InterestMapper {
 
-    public Interest mapInterestToDomainEntity(InterestJDBCEntity entity) {
-        return new Interest(entity.interest());
-    }
+	public Interest mapInterestToDomainEntity(InterestJDBCEntity entity) {
+		return new Interest(entity.interest());
+	}
 
-    public InterestJDBCEntity mapInterestToJDBCEntity(Interest interest) {
-        return new InterestJDBCEntity(interest.interest());
-    }
+	public InterestJDBCEntity mapInterestToJDBCEntity(Interest interest) {
+		return new InterestJDBCEntity(interest.interest());
+	}
 
-    public Set<Interest> mapInterestsToDomainEntities(Set<InterestJDBCEntity> entities) {
-        return entities.stream()
-                .map(this::mapInterestToDomainEntity)
-                .collect(Collectors.toSet());
-    }
+	public Set<Interest> mapInterestsToDomainEntities(Set<InterestJDBCEntity> entities) {
+		return entities.stream().map(this::mapInterestToDomainEntity).collect(Collectors.toSet());
+	}
 
-    public Set<InterestJDBCEntity> mapInterestsToJDBCEntities(Set<Interest> interests) {
-        return interests.stream()
-                .map(this::mapInterestToJDBCEntity)
-                .collect(Collectors.toSet());
-    }
+	public Set<InterestJDBCEntity> mapInterestsToJDBCEntities(Set<Interest> interests) {
+		return interests.stream().map(this::mapInterestToJDBCEntity).collect(Collectors.toSet());
+	}
+
 }

@@ -4,5 +4,7 @@ import com.devsxplore.thesis.students.application.port.in.command.LoadStudentCom
 import com.devsxplore.thesis.students.domain.model.Student;
 
 public interface LoadStudentUseCase {
-    Student loadStudent(LoadStudentCommand command);
+
+	Student loadStudent(LoadStudentCommand command);
+
 }

@@ -16,31 +16,33 @@ import java.time.Instant;
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 public class UserAccountJDBCEntity implements Persistable<Long> {
-    @Transient
-    boolean isNew = true;
-    @Id
-    @NonNull
-    private Long githubId;
-    @NonNull
-    private String login;
-    @NonNull
-    private String displayName;
-    @NonNull
-    private String role;
-    @NonNull
-    private Instant lastLoginAt;
 
-    @Override
-    public Long getId() {
-        return githubId;
-    }
+	@Transient
+	boolean isNew = true;
 
-    @Override
-    public boolean isNew() {
-        return isNew;
-    }
+	@Id
+	@NonNull private Long githubId;
 
-    public void markNotNew() {
-        this.isNew = false;
-    }
+	@NonNull private String login;
+
+	@NonNull private String displayName;
+
+	@NonNull private String role;
+
+	@NonNull private Instant lastLoginAt;
+
+	@Override
+	public Long getId() {
+		return githubId;
+	}
+
+	@Override
+	public boolean isNew() {
+		return isNew;
+	}
+
+	public void markNotNew() {
+		this.isNew = false;
+	}
+
 }

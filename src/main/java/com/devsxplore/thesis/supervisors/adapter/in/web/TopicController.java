@@ -23,38 +23,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TopicController {
 
-    private final TopicCreateUseCase topicCreateUseCase;
-    private final TopicLoadUseCase topicLoadUseCase;
-    private final TopicDeleteUseCase topicDeleteUseCase;
-    private final TopicUpdateUseCase updateUseCase;
+	private final TopicCreateUseCase topicCreateUseCase;
 
+	private final TopicLoadUseCase topicLoadUseCase;
 
-    @GetMapping("/all")
-    @ResponseBody
-    public List<Topic> loadAllTopics() {
-        return topicLoadUseCase.loadAllTopics();
-    }
+	private final TopicDeleteUseCase topicDeleteUseCase;
 
-    @PostMapping("/create")
-    @ResponseBody
-    public Topic createTopic(@Valid TopicCreateDTO dto, RedirectAttributes redirectAttributes) {
-        CreateTopicCommand command = new CreateTopicCommand(dto.supervisorId(), dto.title(), dto.description());
-        Topic topic = topicCreateUseCase.createTopic(command);
-        redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
-        return topic;
-    }
+	private final TopicUpdateUseCase updateUseCase;
 
-    @DeleteMapping("/delete/{id}")
-    @ResponseBody
-    public boolean deleteTopic(@PathVariable("id") Long topicId, RedirectAttributes redirectAttributes) {
-        return topicDeleteUseCase.deleteTopic(new TopicDeleteCommand(topicId));
-    }
+	@GetMapping("/all")
+	@ResponseBody
+	public List<Topic> loadAllTopics() {
+		return topicLoadUseCase.loadAllTopics();
+	}
 
-    @PutMapping("/update/{id}")
-    public Topic updateTopic(@PathVariable("id") Long topicId, @Valid TopicUpdateDTO dto) {
-        TopicUpdateCommand command = new TopicUpdateCommand(dto.supervisorId(), topicId, dto.topic(), dto.description());
-        return updateUseCase.updateTopic(command);
-    }
+	@PostMapping("/create")
+	@ResponseBody
+	public Topic createTopic(@Valid TopicCreateDTO dto, RedirectAttributes redirectAttributes) {
+		CreateTopicCommand command = new CreateTopicCommand(dto.supervisorId(), dto.title(), dto.description());
+		Topic topic = topicCreateUseCase.createTopic(command);
+		redirectAttributes.addFlashAttribute("erfolgreichErstellt", "Thema wurde erstellt");
+		return topic;
+	}
 
+	@DeleteMapping("/delete/{id}")
+	@ResponseBody
+	public boolean deleteTopic(@PathVariable("id") Long topicId, RedirectAttributes redirectAttributes) {
+		return topicDeleteUseCase.deleteTopic(new TopicDeleteCommand(topicId));
+	}
+
+	@PutMapping("/update/{id}")
+	public Topic updateTopic(@PathVariable("id") Long topicId, @Valid TopicUpdateDTO dto) {
+		TopicUpdateCommand command = new TopicUpdateCommand(dto.supervisorId(), topicId, dto.topic(),
+				dto.description());
+		return updateUseCase.updateTopic(command);
+	}
 
 }

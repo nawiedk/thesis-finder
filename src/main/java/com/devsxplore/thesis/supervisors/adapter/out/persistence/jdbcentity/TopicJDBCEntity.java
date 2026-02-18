@@ -4,7 +4,5 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table("TOPIC")
-public record TopicJDBCEntity(@Id Long topicId,
-                              String title,
-                              String description) {
+public record TopicJDBCEntity(@Id Long topicId, String title, String description) {
 }

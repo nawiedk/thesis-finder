@@ -19,8 +19,12 @@
         <div th:if="${supervisor != null}">
 
             <dl class="row">
+
+                <dt class="col-sm-3">UUID</dt>
+                <dd class="col-sm-9" th:text="${supervisor.publicId}">UUID</dd>
+
                 <dt class="col-sm-3">E-Mail</dt>
-                <dd class="col-sm-9" th:text="${supervisor.Email}">test@example.com</dd>
+                <dd class="col-sm-9" th:text="${supervisor.email}">test@example.com</dd>
 
                 <dt class="col-sm-3">Büro</dt>
                 <dd class="col-sm-9" th:text="${supervisor.office}">Raum XY</dd>

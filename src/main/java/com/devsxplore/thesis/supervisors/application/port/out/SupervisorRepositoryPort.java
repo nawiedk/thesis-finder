@@ -1,20 +1,24 @@
 package com.devsxplore.thesis.supervisors.application.port.out;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import com.devsxplore.thesis.supervisors.domain.model.Supervisor;
 
-import java.util.List;
-import java.util.Optional;
-
 public interface SupervisorRepositoryPort {
-    Supervisor save(Supervisor supervisor);
 
-    Optional<Supervisor> load(Long supervisorId);
+	Supervisor save(Supervisor supervisor);
 
-    List<Supervisor> loadAll();
+	Optional<Supervisor> load(Long supervisorId);
 
-    boolean delete(Long supervisorId);
+	Set<Supervisor> loadAll();
 
-    boolean existsBySupervisorUserId(Long SupervisorUserId);
+	boolean delete(Long supervisorId);
 
-    Optional<Supervisor> loadByUserId(Long userId);
+	boolean existsBySupervisorUserId(Long SupervisorUserId);
+
+	Optional<Supervisor> loadByUserId(Long userId);
+
+	Optional<Supervisor> loadByPublicId(UUID publicId);
+
 }
